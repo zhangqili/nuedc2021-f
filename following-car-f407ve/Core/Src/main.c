@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dma.h"
 #include "i2c.h"
 #include "tim.h"
 #include "usart.h"
@@ -36,6 +37,9 @@
 #include "motor_control.h"
 #include "flash.h"
 #include "fezui.h"
+#include "atk_ms901m.h"
+#include "atk_ms901m_uart.h"
+#include "communication.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -79,6 +83,7 @@ uint8_t *f_ptr;
 uint8_t uart1_buf[8];
 uint8_t color_flag = 0;
 uint8_t tempEncoder = 0;
+atk_ms901m_attitude_data_t attitude_dat;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -120,6 +125,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_I2C2_Init();
   MX_TIM2_Init();
   MX_TIM3_Init();
@@ -130,6 +136,7 @@ int main(void)
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
+  MX_UART4_Init();
   /* USER CODE BEGIN 2 */
   fezui_init();
   /* PRESETS BEGIN */
@@ -191,6 +198,8 @@ int main(void)
   //HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);//ï¿½ï¿½NVICï¿½Ð¶Ï¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½EXTI12ï¿½Ð¶ï¿½
 
 
+  atk_ms901m_uart_init(115200);
+  Communication_Enable(&huart4,UART4_RX_Buffer,BUFFER_LENGTH);
   /* USER CODE END 2 */
 
   /* Infinite loop */

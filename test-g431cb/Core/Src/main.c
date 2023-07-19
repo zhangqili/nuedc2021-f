@@ -109,7 +109,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   jy901_imubuf_init(&imu_dat);
   atk_ms901m_uart_init(115200);
-  Communication_Enable(&huart3,USART3_RX_Buffer,BUFFER_LENGTH);
+  Communication_Enable(&huart3,UART4_RX_Buffer,BUFFER_LENGTH);
   atk_ms901m_attitude_data_t attitude_dat;
   /* USER CODE END 2 */
 

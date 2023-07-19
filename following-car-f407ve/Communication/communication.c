@@ -6,7 +6,7 @@
  */
 #include "main.h"
 #include "communication.h"
-#include "jy901.h"
+#include "atk_ms901m_uart.h"
 
 uint8_t UART4_RX_Buffer[BUFFER_LENGTH];
 uint8_t UART4_RX_Length=0;
@@ -16,7 +16,6 @@ uint16_t Communication_TX_Count=0;
 uint16_t Communication_RX_Count=0;
 
 extern DMA_HandleTypeDef hdma_uart4_rx;
-extern imubuf_t imu_dat;
 
 void Communication_Unpack(UART_HandleTypeDef *huart)
 {
@@ -24,12 +23,14 @@ void Communication_Unpack(UART_HandleTypeDef *huart)
     {
       __HAL_UART_CLEAR_IDLEFLAG(huart);
       HAL_UART_DMAStop(huart);
+      if(huart->Instance == UART4)
+      {
+          UART4_RX_Length = BUFFER_LENGTH - __HAL_DMA_GET_COUNTER(&hdma_uart4_rx);
 
-      UART4_RX_Length = BUFFER_LENGTH - __HAL_DMA_GET_COUNTER(&hdma_uart4_rx);
+          atk_ms901m_uart_rx_fifo_write(UART4_RX_Buffer,UART4_RX_Length);
 
-      jy901_imubuf_input(&imu_dat, UART4_RX_Buffer, UART4_RX_Length);
-
-      HAL_UART_Receive_DMA(huart, UART4_RX_Buffer, BUFFER_LENGTH);
+          HAL_UART_Receive_DMA(huart, UART4_RX_Buffer, BUFFER_LENGTH);
+      }
     }
 }
 

@@ -96,7 +96,7 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   jy901_imubuf_init(&imu_dat);
-  Communication_Enable(&huart4,USART3_RX_Buffer,BUFFER_LENGTH);
+  Communication_Enable(&huart4,UART4_RX_Buffer,BUFFER_LENGTH);
   /* USER CODE END 2 */
 
   /* Infinite loop */

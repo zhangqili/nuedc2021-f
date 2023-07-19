@@ -118,10 +118,10 @@ typedef enum
     CMD_NA_0F,
 } USART_CMD;
 
-extern uint8_t USART3_TX_Buffer[BUFFER_LENGTH];
-extern uint8_t USART3_TX_Length;
-extern uint8_t USART3_RX_Buffer[BUFFER_LENGTH];
-extern uint8_t USART3_RX_Length;
+extern uint8_t UART4_TX_Buffer[BUFFER_LENGTH];
+extern uint8_t UART4_TX_Length;
+extern uint8_t UART4_RX_Buffer[BUFFER_LENGTH];
+extern uint8_t UART4_RX_Length;
 
 extern uint16_t Communication_TX_Count;
 extern uint16_t Communication_RX_Count;

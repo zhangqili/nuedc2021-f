@@ -9,10 +9,10 @@
 #include "jy901.h"
 #include "atk_ms901m_uart.h"
 
-uint8_t USART3_RX_Buffer[BUFFER_LENGTH];
-uint8_t USART3_RX_Length=0;
-uint8_t USART3_TX_Buffer[BUFFER_LENGTH];
-uint8_t USART3_TX_Length=0;
+uint8_t UART4_RX_Buffer[BUFFER_LENGTH];
+uint8_t UART4_RX_Length=0;
+uint8_t UART4_TX_Buffer[BUFFER_LENGTH];
+uint8_t UART4_TX_Length=0;
 uint16_t Communication_TX_Count=0;
 uint16_t Communication_RX_Count=0;
 
@@ -26,12 +26,12 @@ void Communication_Unpack(UART_HandleTypeDef *huart)
       __HAL_UART_CLEAR_IDLEFLAG(huart);
       HAL_UART_DMAStop(huart);
 
-      USART3_RX_Length = BUFFER_LENGTH - __HAL_DMA_GET_COUNTER(&hdma_usart3_rx);
+      UART4_RX_Length = BUFFER_LENGTH - __HAL_DMA_GET_COUNTER(&hdma_usart3_rx);
 
       //jy901_imubuf_input(&imu_dat, USART3_RX_Buffer, USART3_RX_Length);
-      atk_ms901m_uart_rx_fifo_write(USART3_RX_Buffer,USART3_RX_Length);
+      atk_ms901m_uart_rx_fifo_write(UART4_RX_Buffer,UART4_RX_Length);
 
-      HAL_UART_Receive_DMA(huart, USART3_RX_Buffer, BUFFER_LENGTH);
+      HAL_UART_Receive_DMA(huart, UART4_RX_Buffer, BUFFER_LENGTH);
     }
 }
 
