@@ -11,6 +11,7 @@
 #include "pid_control.h"
 #include "usart.h"
 #include "main.h"
+#include "stage.h"
 
 uint8_t USART1_RX_BUF[USART1_REC_LEN];//���ջ���,���USART_REC_LEN���ֽ�.
 uint16_t USART1_RX_STA=0;//����״̬���//bit15��������ɱ�־��bit14~0�����յ�����Ч�ֽ���Ŀ
@@ -80,7 +81,8 @@ void  HAL_UART_RxCpltCallback(UART_HandleTypeDef  *huart)//�����жϻص
 ////			break;
 ////  }
 //}
-
+//int a=0 ,b=0;
+//uint16_t pathlength=0;
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	
@@ -91,11 +93,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 //		{
 			//Turn.pGain=23;
 			//Turn.dGain=30;
-			//motor_pid_l.pGain=150;
-			//motor_pid_l.iGain=14;
-			//motor_pid_r.pGain=150;
-			//motor_pid_r.iGain=14;
-			Track(expect_speed);
+//			local.pGain=1;
+			motor_pid_l.pGain=150;
+			motor_pid_l.iGain=18;
+			motor_pid_r.pGain=150;
+			motor_pid_r.iGain=18;
+			expectlength=600;
+			turn_left_speed();
+			//local_speed_speed();
 //		}
 //		count++;
 //		if(count>501)

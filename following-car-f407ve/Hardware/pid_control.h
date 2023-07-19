@@ -32,6 +32,7 @@ extern PID motor_pid;
 extern PID Distance;
 extern PID Turn;
 extern PID Turn_Angle;
+extern PID local;
 
 extern float bias_error;
 extern int8_t expect_speed;
@@ -41,4 +42,8 @@ int Up_balance(float Angle,float Gyro,float Mechanical_Angle);
 int Velocity(int Encoder_left,int Encoder_right,int Mechanical_velocity);
 int Turn_out(int gyro_Z,int RC);
 void Track(uint8_t expect_speed);
+void give_pwm ();
+void follow_adjust();
+void Motor_PID(int speed_l, int speed_r);
+void follow_speed_adjust(void);
 #endif /* PID_CONTROL_PID_CONTROL_H_*/

@@ -8,7 +8,7 @@
 #include "motor_control.h"
 #include "us100.h"
 #include <math.h>
-
+#include "stage.h"
 #define PWM_MAX_LIMIT 7000
 
 PID motor_pid_l; //���pid����
@@ -17,6 +17,7 @@ PID motor_pid;
 PID Distance;
 PID Turn;
 PID Turn_Angle;
+PID local;
 float Limit_distance;
 float distance;
 float bias_error; //循迹偏差
@@ -28,6 +29,98 @@ int8_t expect_speed = 20; //期待速度
 float defult = 20; //这里所有的控制速度有关都用default 避免状态改变导致expect_speed改变
 float stage; //这里指用来写状态
 
+
+//void turn_left()
+//{
+//	yaw_adjust=90;
+//	if((Angle_gz <= yaw_adjust+5)&&(Angle_gz>= yaw_adjust-5))//转到为
+//	{
+//		track_flag=0;
+//		turn_flag=0;
+//	}
+//	else
+//	{
+//		track_flag=0;
+//		turn_flag=1;
+//		turn_state = TURN_LEFT;
+//	}
+//	follow_speed_adjust();
+//}
+
+void follow_adjust()
+{
+	if(track_flag && (turn_flag!=1))
+	{
+		Track(20);
+	}
+	else if((track_flag!=1)&& turn_flag)
+	{
+		if((turn_state == TURN_LEFT)&&(yaw <yaw_adjust))
+		{
+			motor_pid_l.pidout = -1000;
+			motor_pid_r.pidout = 1000;
+			give_pwm();
+		}
+		else if((turn_state == TURN_RIGHT)&&(yaw >yaw_adjust))
+		{
+			motor_pid_l.pidout = 1000;
+			motor_pid_r.pidout = -1000;
+			give_pwm();
+		}
+		else if((turn_state == TURN_BACK)&&(yaw >yaw_adjust))
+		{
+			motor_pid_l.pidout = 1000;
+			motor_pid_r.pidout = -1000;
+			give_pwm();
+		}
+		else
+		{
+			motor_pid_l.pidout = 0;
+			motor_pid_r.pidout = 0;
+			give_pwm();
+		}
+	}
+	else
+	{
+		motor_pid_l.pidout = 0;
+		motor_pid_r.pidout = 0;
+		give_pwm();
+	}
+}
+void follow_speed_adjust(void)
+{
+	if(track_flag && (turn_flag!=1))
+		{
+			Track(20);
+		}
+	else if((track_flag==0)&& turn_flag)
+	{
+		if((turn_state == TURN_LEFT)&&(yaw <yaw_adjust))
+		{
+			Motor_PID(-40, 40);
+		}
+		else if((turn_state == TURN_RIGHT)&&(yaw >yaw_adjust))
+		{
+			Motor_PID(40, -40);
+		}
+		else if((turn_state == TURN_BACK)&&(yaw >yaw_adjust))
+		{
+			Motor_PID(40, -40);
+		}
+		else
+		{
+			motor_pid_l.pidout = 0;
+			motor_pid_r.pidout = 0;
+			give_pwm();
+		}
+	}
+	else
+	{
+		motor_pid_l.pidout = 0;
+		motor_pid_r.pidout = 0;
+		give_pwm();
+	}
+}
 void pid_inti(PID *pid)
 {
   pid->instate = 0;
@@ -83,6 +176,27 @@ void Motor_PID(int speed_l, int speed_r)
   Give_Motor_PWM(motor_pid_l.pidout, motor_pid_r.pidout);
 }
 
+void give_pwm ()
+{
+	if (motor_pid_l.pidout > PWM_MAX_LIMIT)
+	  {
+	    motor_pid_l.pidout = PWM_MAX_LIMIT;
+	  }
+	  else if (motor_pid_l.pidout < -PWM_MAX_LIMIT)
+	  {
+	    motor_pid_l.pidout = -PWM_MAX_LIMIT;
+	  }
+	  if (motor_pid_r.pidout > PWM_MAX_LIMIT)
+	  {
+	    motor_pid_r.pidout = PWM_MAX_LIMIT;
+	  }
+	  else if (motor_pid_r.pidout < -PWM_MAX_LIMIT)
+	  {
+	    motor_pid_r.pidout = -PWM_MAX_LIMIT;
+	  }
+	  Give_Motor_PWM(motor_pid_l.pidout, motor_pid_r.pidout);
+}
+
 void Turn_Control(void)
 {
   Turn.errdat = bias_error;
@@ -135,6 +249,19 @@ void Turn_In_Place(float dir)
     stage = 1;
   }
 
+}
+void local_speed_speed()
+{
+	Get_Encoder();
+	a=motor_l.Encoder>0 ? motor_l.Encoder:-motor_l.Encoder;
+	b=motor_r.Encoder>0 ? motor_r.Encoder:-motor_r.Encoder;
+	pathlength+=(a+b)*0.5;
+	local.errdat=expectlength-pathlength;
+	PidLocCtrl(&local,0);
+	motor_pid_l.errdat=local.pidout-motor_l.Encoder;
+	motor_pid_r.errdat=-local.pidout-motor_r.Encoder;
+	PidIncCtrl(&motor_pid_l);
+	PidIncCtrl(&motor_pid_r);
 }
 //适用于双车跟随 固定位置差以及固定速度
 //limit 这里是指双车之间距离偏差为多大时启用积分项

@@ -222,10 +222,10 @@ int main(void)
       USART_RX_CNT=0;
       USART_RX_FLG=0;
     }
-    tempEncoder=(motor_l.Encoder+motor_r.Encoder)/2;
+//    tempEncoder=(motor_l.Encoder+motor_r.Encoder)/2;
     HAL_UART_Transmit(&huart1,&tempEncoder,1,0xff);
     fezui_timer_handler();
-    //Give_Motor_PWM(4000, 4000);
+   // Give_Motor_PWM(4000, 4000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
