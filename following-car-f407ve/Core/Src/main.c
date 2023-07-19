@@ -83,7 +83,6 @@ uint8_t *f_ptr;
 uint8_t uart1_buf[8];
 uint8_t color_flag = 0;
 uint8_t tempEncoder = 0;
-atk_ms901m_attitude_data_t attitude_dat;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/

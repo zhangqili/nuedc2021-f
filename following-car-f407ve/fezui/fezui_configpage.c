@@ -57,6 +57,9 @@ void configpage_draw(lefl_page_t *page)
   sprintf(fezui_tempstr,"r_e:%d",speed_r);
   u8g2_DrawStr(&u8g2, 64, ITEM_HEIGHT*5, fezui_tempstr);
 
+
+  sprintf(fezui_tempstr,"yaw:%f",Angle_gz);
+  u8g2_DrawStr(&u8g2, 0, ITEM_HEIGHT*6, fezui_tempstr);
   /*
   for (uint8_t i = 0; i < configmenu.len; i++)
   {
