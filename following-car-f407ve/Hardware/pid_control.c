@@ -11,6 +11,7 @@
 #include "stage.h"
 #define PWM_MAX_LIMIT 7000
 
+
 PID motor_pid_l; //���pid����
 PID motor_pid_r;
 PID motor_pid;
@@ -93,6 +94,7 @@ void follow_speed_adjust(void)
 		{
 			Track(20);
 		}
+#if USE_GYRO == 1
 	else if((track_flag==0)&& turn_flag)
 	{
 		if((turn_state == TURN_LEFT)&&(yaw <yaw_adjust))
@@ -114,6 +116,30 @@ void follow_speed_adjust(void)
 			give_pwm();
 		}
 	}
+#else
+	else if((track_flag==0)&& turn_flag)
+	{
+		if(turn_state == TURN_LEFT)
+		{
+			//Motor_PID(-40, 40);
+		    Motor_PID(-20,20);
+		}
+		else if(turn_state == TURN_RIGHT)
+		{
+		    Motor_PID(20,-20);
+		}
+		else if(turn_state == TURN_BACK)
+		{
+		    Motor_PID(20,-20);
+		}
+		else
+		{
+			motor_pid_l.pidout = 0;
+			motor_pid_r.pidout = 0;
+			give_pwm();
+		}
+	}
+#endif
 	else
 	{
 		motor_pid_l.pidout = 0;

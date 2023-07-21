@@ -7,6 +7,9 @@
 #ifndef PID_CONTROL_PID_CONTROL_H_
 #define PID_CONTROL_PID_CONTROL_H_
 #include "main.h"
+
+#define USE_GYRO 0
+
 typedef struct
 {
         float pGain;//P����ϵ��
@@ -45,5 +48,5 @@ void Track(uint8_t expect_speed);
 void give_pwm ();
 void follow_adjust();
 void Motor_PID(int speed_l, int speed_r);
-void follow_speed_adjust(void);
+void follow_speed_adjust(void);//循迹和转弯速度闭环
 #endif /* PID_CONTROL_PID_CONTROL_H_*/

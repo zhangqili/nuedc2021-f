@@ -100,6 +100,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			motor_pid_r.iGain=18;
 			expectlength=600;
 			turn_left_speed();
+			model_select();
+			follow_speed_adjust();
 			//local_speed_speed();
 //		}
 //		count++;

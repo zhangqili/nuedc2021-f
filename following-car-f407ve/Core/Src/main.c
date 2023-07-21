@@ -233,6 +233,7 @@ int main(void)
 //    tempEncoder=(motor_l.Encoder+motor_r.Encoder)/2;
     HAL_UART_Transmit(&huart1,&tempEncoder,1,0xff);
     fezui_timer_handler();
+
    // Give_Motor_PWM(4000, 4000);
     /* USER CODE END WHILE */
 
