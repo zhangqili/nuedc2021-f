@@ -10,10 +10,8 @@
 #include "atk_ms901m_uart.h"
 #include "motor_control.h"
 
-uint8_t UART4_RX_Buffer[BUFFER_LENGTH];
-uint8_t UART4_RX_Length=0;
-uint8_t UART4_TX_Buffer[BUFFER_LENGTH];
-uint8_t UART4_TX_Length=0;
+COM_CREATE(UART4)
+
 uint16_t Communication_TX_Count=0;
 uint16_t Communication_RX_Count=0;
 

@@ -218,7 +218,7 @@ void model_select()
                     turn_state = TURN_LEFT;
                     track_flag = 0;
                     turn_flag = 0;
-#ifdef USE_GYRO == 1
+#if USE_GYRO == 1
                     yaw_adjust = Angle_gz + 90;
                     if (yaw_adjust > 360)
                         yaw_adjust %= 360;
@@ -231,7 +231,7 @@ void model_select()
                     turn_state = TURN_RIGHT;
                     track_flag = 0;
                     turn_flag = 0;
-#ifdef USE_GYRO == 1
+#if USE_GYRO == 1
                     yaw_adjust = Angle_gz - 90;
                     if (yaw_adjust > 360)
                         yaw_adjust %= 360;
@@ -260,7 +260,7 @@ void model_select()
                 case TURN_LEFT:
                     //yaw_ djust-=90;//假设左转度数减小
                     //yaw_adjust=(yaw_adjust+360)%360;
-#ifdef USE_GYRO ==1
+#if USE_GYRO ==1
                     if ((Angle_gz <= yaw_adjust + 5)
                             && (Angle_gz >= yaw_adjust - 5))			//转到为
 #else
@@ -278,7 +278,7 @@ void model_select()
                     }
                     break;
                 case TURN_RIGHT:
-#ifdef USE_GYRO ==1
+#if USE_GYRO ==1
                     if ((Angle_gz >= yaw_adjust - 5)
                             && (Angle_gz <= yaw_adjust + 5))
 #else
@@ -308,7 +308,7 @@ void model_select()
                     break;
                 case TURN_BACK:
                     //yaw_adjust+=180;
-#ifdef USE_GYRO ==1
+#if USE_GYRO ==1
                     if ((Angle_gz >= yaw_adjust - 5)
                             && (Angle_gz <= yaw_adjust + 5))
 #else
