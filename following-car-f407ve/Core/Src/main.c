@@ -40,6 +40,7 @@
 #include "atk_ms901m.h"
 #include "atk_ms901m_uart.h"
 #include "communication.h"
+#include "stage.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -199,6 +200,10 @@ int main(void)
 
   atk_ms901m_uart_init(115200);
   Communication_Enable(&huart4,UART4_RX_Buffer,BUFFER_LENGTH);
+
+  yaw_adjust=Angle_gz+90;
+  car_state =CAR_TURN;
+  turn_state =TURN_LEFT;
   /* USER CODE END 2 */
 
   /* Infinite loop */

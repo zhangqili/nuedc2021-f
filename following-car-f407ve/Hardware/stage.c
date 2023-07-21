@@ -342,7 +342,7 @@ void model_select()
             {
                 car_state = CAR_TRACK;
                 turn_state = TURN_STRAIGHT;
-                track_flag = 1;
+                track_flag = 0;
                 turn_flag = 0;
 
             }

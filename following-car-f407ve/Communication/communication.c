@@ -34,6 +34,7 @@ void Communication_Unpack(UART_HandleTypeDef *huart)
           atk_ms901m_get_attitude(&attitude_dat,0xff);
 
           Angle_gz=attitude_dat.yaw;
+          if(Angle_gz<0)Angle_gz+=360;
 
           HAL_UART_Receive_DMA(huart, UART4_RX_Buffer, BUFFER_LENGTH);
 

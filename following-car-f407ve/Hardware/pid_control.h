@@ -8,7 +8,7 @@
 #define PID_CONTROL_PID_CONTROL_H_
 #include "main.h"
 
-#define USE_GYRO 0
+#define USE_GYRO 1
 
 typedef struct
 {

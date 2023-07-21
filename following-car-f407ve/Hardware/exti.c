@@ -94,13 +94,18 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			//Turn.pGain=23;
 			//Turn.dGain=30;
 //			local.pGain=1;
-			motor_pid_l.pGain=150;
+			motor_pid_l.pGain=200;
 			motor_pid_l.iGain=18;
-			motor_pid_r.pGain=150;
+			motor_pid_r.pGain=200;
 			motor_pid_r.iGain=18;
-			expectlength=600;
-			turn_left_speed();
+			//expectlength=600;
+			//turn_left_speed();
 			model_select();
+//			if((Angle_gz>90)&&(Angle_gz<100))
+//			{
+//			    track_flag=0;
+//			    turn_flag=0;
+//			}
 			follow_speed_adjust();
 			//local_speed_speed();
 //		}

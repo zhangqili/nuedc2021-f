@@ -18,23 +18,6 @@ lefl_key_t key_down;
 lefl_key_t key_go;
 lefl_key_t key_back;
 
-uint32_t fezui_keytotalcounts[MAIN_KEY_NUM]={0};
-uint32_t fezui_keyinitcounts[MAIN_KEY_NUM]={0};
-
-lefl_loop_array_t KPS_history =
-{
-    .index=0,
-    .len=KPS_HISTORY_LENGTH,
-};
-lefl_loop_array_t KPS_queue =
-{
-    .index=0,
-    .len=REFRESH_RATE,
-};
-uint8_t KPS_history_max=0;
-uint32_t fezui_fps = 0;
-uint8_t fezui_kps = 0;
-uint8_t UI_KPSMaximumPerSecond = 0;
 uint8_t fezui_rest_countdown = SCREEN_REST_TIME;
 uint8_t fezui_debug;
 uint32_t fezui_run_time;
@@ -62,27 +45,6 @@ const uint8_t led_seg_like_font[195] U8G2_FONT_SECTION("led_seg_like_font") =
 lefl_link_frame_t mainframe = {
         .current_page=&configpage
     };
-
-lefl_loop_array_t analog_historys[4]=
-{
-    {
-        .index=0,
-        .len=HISTORY_LENGTH,
-    },
-    {
-        .index=0,
-        .len=HISTORY_LENGTH,
-    },
-    {
-        .index=0,
-        .len=HISTORY_LENGTH,
-    },
-    {
-        .index=0,
-        .len=HISTORY_LENGTH,
-    }
-};
-uint8_t analog_history_buffer[4]={0};
 
 lefl_cursor_t cursor={0,0,128,64,fezui_draw_cursor};
 lefl_cursor_t target_cursor={0,0,0,0,fezui_draw_cursor};

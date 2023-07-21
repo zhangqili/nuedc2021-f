@@ -97,23 +97,21 @@ void follow_speed_adjust(void)
 #if USE_GYRO == 1
 	else if((track_flag==0)&& turn_flag)
 	{
-		if((turn_state == TURN_LEFT)&&(yaw <yaw_adjust))
+		if(turn_state == TURN_LEFT)
 		{
-			Motor_PID(-40, 40);
+			Motor_PID(-10, 10);
 		}
-		else if((turn_state == TURN_RIGHT)&&(yaw >yaw_adjust))
+		else if(turn_state == TURN_RIGHT)
 		{
-			Motor_PID(40, -40);
+			Motor_PID(10, -10);
 		}
-		else if((turn_state == TURN_BACK)&&(yaw >yaw_adjust))
+		else if(turn_state == TURN_BACK)
 		{
-			Motor_PID(40, -40);
+			Motor_PID(10, -10);
 		}
 		else
 		{
-			motor_pid_l.pidout = 0;
-			motor_pid_r.pidout = 0;
-			give_pwm();
+		    Motor_PID(0,0);
 		}
 	}
 #else
@@ -134,17 +132,17 @@ void follow_speed_adjust(void)
 		}
 		else
 		{
-			motor_pid_l.pidout = 0;
-			motor_pid_r.pidout = 0;
-			give_pwm();
+			//motor_pid_l.pidout = 0;
+			Motor_PID(0,0);
 		}
 	}
 #endif
 	else
 	{
-		motor_pid_l.pidout = 0;
-		motor_pid_r.pidout = 0;
-		give_pwm();
+	    Motor_PID(0,0);
+//		motor_pid_l.pidout = 0;
+//		motor_pid_r.pidout = 0;
+//		give_pwm();
 	}
 }
 void pid_inti(PID *pid)
@@ -160,6 +158,8 @@ void pid_inti(PID *pid)
 void PidIncCtrl(PID *pid)
 {
   pid->last_pidout = pid->pidout;
+  pid->instate+=pid->errdat*pid->iGain;
+  pid->ilimit=pid->instate>500?0:pid->instate;
   pid->pidout += pid->pGain * (pid->errdat - pid->perr)
       + pid->iGain * pid->errdat
       + pid->dGain * (pid->errdat - 2 * pid->perr + pid->lastperr_errdat);

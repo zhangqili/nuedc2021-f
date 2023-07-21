@@ -9,6 +9,7 @@
 #include "gpio.h"
 #include "main.h"
 #include "pid_control.h"
+#include "stage.h"
 #include "motor_control.h"
 
 lefl_page_t configpage =
@@ -58,8 +59,11 @@ void configpage_draw(lefl_page_t *page)
   u8g2_DrawStr(&u8g2, 64, ITEM_HEIGHT*5, fezui_tempstr);
 
 
-  sprintf(fezui_tempstr,"yaw:%f",Angle_gz);
+  sprintf(fezui_tempstr,"yaw:%.1f",Angle_gz);
   u8g2_DrawStr(&u8g2, 0, ITEM_HEIGHT*6, fezui_tempstr);
+
+  sprintf(fezui_tempstr,"yaw_adjust:%d",yaw_adjust);
+  u8g2_DrawStr(&u8g2, 0, ITEM_HEIGHT*7, fezui_tempstr);
   /*
   for (uint8_t i = 0; i < configmenu.len; i++)
   {
