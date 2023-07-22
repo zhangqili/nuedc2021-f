@@ -7,7 +7,7 @@ uart = UART(3, 115200, timeout_char=1000)
 GRAYSCALE_THRESHOLD = [(63, 22, 9, 72, 3, 66)]#巡线的阈值
 
 
-#摄像头设置
+# 摄像头设置
 sensor.reset()
 sensor.set_contrast(1)
 sensor.set_pixformat(sensor.RGB565)
