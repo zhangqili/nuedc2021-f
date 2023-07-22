@@ -140,7 +140,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   fezui_init();
   /* PRESETS BEGIN */
-  Flash_Recovery();
+  //Flash_Recovery();
   /*
   if (HAL_GPIO_ReadPin(BOOT_GPIO_Port, BOOT_Pin))
   {
@@ -184,16 +184,18 @@ int main(void)
   //motor_pid_r.iGain=10;
   /* PRESETS END */
 
+
   //HAL_UART_Receive_IT(&huart2, &USART_RX_BYTE, 1);
-  HAL_NVIC_DisableIRQ(EXTI15_10_IRQn); //ï¿½ï¿½NVICï¿½Ð¶Ï¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¹Ø±ï¿½EXTI12ï¿½Ð¶ï¿½
+  //HAL_NVIC_DisableIRQ(EXTI15_10_IRQn); //ï¿½ï¿½NVICï¿½Ð¶Ï¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¹Ø±ï¿½EXTI12ï¿½Ð¶ï¿½
   //MPU6050_Init(); //ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½mpu6050
 //  __HAL_TIM_CLEAR_FLAG(&htim1,TIM_FLAG_UPDATE);
-  HAL_TIM_Base_Start_IT(&htim6);
 
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1); //ï¿½ï¿½ï¿½ï¿½TIM2ï¿½ï¿½PWM
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
   HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL); //ï¿½ï¿½ï¿½ï¿½TIM3 4ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
   HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_ALL);
+  HAL_TIM_Base_Start_IT(&htim6);
+
 
   //HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);//ï¿½ï¿½NVICï¿½Ð¶Ï¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½EXTI12ï¿½Ð¶ï¿½
 
@@ -204,41 +206,20 @@ int main(void)
   Communication_Enable(&huart1, USART1_RX_Buffer,BUFFER_LENGTH);
 
   yaw_adjust=Angle_gz+90;
-  car_state =CAR_TURN;
-  turn_state =TURN_LEFT;
+  car_state =CAR_START;
+  //turn_state =TURN_LEFT;
+  number = 1;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
   while (1)
   {
     HAL_GPIO_TogglePin(LED_GPIO_Port,LED_Pin);
-    if(USART_RX_FLG)
-    {
-      //sscanf(USART_RX_BUF,"%f",&bias_error);
-      if(USART_RX_CNT==6)
-      {
-        //HAL_IWDG_Refresh(&hiwdg);
-        //f_ptr = (unsigned char*)&bias_error;
-        sscanf((const char *)USART_RX_BUF,"\x2c\x12%c%c%c\x5b",tempInt8,tempInt8+1,&color_flag);
-        switch(color_flag)
-        {
-          case 2:
-            bias_error=(float)tempInt8[0];
-            break;
-          default:
-            bias_error=(float)tempInt8[1];
-            break;
-        }
-      }
 
-      //sprintf(USART_RX_STR,"%f",bias_error);
-      //strcpy(USART_RX_STR,USART_RX_BUF);
-      USART_RX_CNT=0;
-      USART_RX_FLG=0;
-    }
-//    tempEncoder=(motor_l.Encoder+motor_r.Encoder)/2;
-    HAL_UART_Transmit(&huart1,&tempEncoder,1,0xff);
+    //tempEncoder=(motor_l.Encoder+motor_r.Encoder)/2;
+    //HAL_UART_Transmit(&huart1,&tempEncoder,1,0xff);
     fezui_timer_handler();
 
    // Give_Motor_PWM(4000, 4000);

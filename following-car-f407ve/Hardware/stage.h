@@ -21,7 +21,6 @@ void turn_left();
 void turn_left_speed();
 void model_select();
 void turn_right_speed();
-#endif /* STAGE_H_ */
 enum CAR_STATE
 {
     CAR_START,
@@ -51,3 +50,6 @@ extern	enum STOP_STATE stop_state;
 extern bool MV_stop_flag;
 extern bool MV_end_flag;
 extern bool MV_main_flag;
+
+extern uint8_t number;
+#endif /* STAGE_H_ */

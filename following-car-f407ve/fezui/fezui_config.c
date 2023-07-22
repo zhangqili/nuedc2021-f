@@ -22,21 +22,6 @@ void fezui_init()
   u8g2_SetBitmapMode(&u8g2, 1);
   u8g2_SetFontMode(&u8g2, 1);
   u8g2_ClearBuffer(&u8g2);
-  u8g2_DrawLine(&u8g2, 15, 15, 20, 18);
-  u8g2_DrawLine(&u8g2, 15, 22, 20, 18);
-  u8g2_DrawLine(&u8g2, 26, 16, 20, 18);
-  u8g2_DrawLine(&u8g2, 26, 26, 20, 18);
-  u8g2_DrawLine(&u8g2, 26, 16, 31, 12);
-  u8g2_DrawLine(&u8g2, 21, 8, 31, 12);
-  u8g2_DrawLine(&u8g2, 39, 4, 31, 12);
-  u8g2_DrawLine(&u8g2, 42, 21, 31, 12);
-  u8g2_DrawLine(&u8g2, 26, 26, 33, 30);
-  u8g2_DrawLine(&u8g2, 46, 39, 33, 30);
-  u8g2_DrawLine(&u8g2, 26, 26, 26, 38);
-  u8g2_DrawLine(&u8g2, 42, 44, 26, 38);
-  u8g2_DrawLine(&u8g2, 42, 21, 52, 27);
-  u8g2_DrawLine(&u8g2, 55, 26, 52, 27);
-  u8g2_DrawLine(&u8g2, 42, 21, 50, 32);
   u8g2_SendBuffer(&u8g2);
 
   lefl_link_frame_navigate(&mainframe, &configpage);

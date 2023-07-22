@@ -23,7 +23,7 @@ bool deliver_return_flag; //假为送药真为让你返回
 bool turn_finish_flag;
 bool num_flag;   //k210识别到的数字是否所需，1代表停止识别到0代表没有继续前进
 
-uint8_t NUM = 0;   //k210返回第一次识别到的数字
+uint8_t number = 0;   //k210返回第一次识别到的数字
 uint8_t track_flag;
 uint8_t turn_flag;
 uint8_t turn_dir; //turn方向如果为left90
@@ -47,7 +47,8 @@ void turn_left()
     {
         track_flag = 0;
         turn_flag = 0;
-    } else //没有转到位
+    }
+    else //没有转到位
     {
         //car_state= CAR_TURN;
         track_flag = 0;
@@ -57,13 +58,14 @@ void turn_left()
 }
 void turn_left_speed()
 {
-    yaw_adjust = 90;
-    turn_state = TURN_LEFT;
+//    yaw_adjust = 90;
+//    turn_state = TURN_LEFT;
     if ((Angle_gz <= yaw_adjust + 5) && (Angle_gz >= yaw_adjust - 5)) //转到为
     {
         track_flag = 0;
         turn_flag = 0;
-    } else //没有转到位
+    }
+    else //没有转到位
     {
         //car_state= CAR_TURN;
         track_flag = 0;
@@ -87,21 +89,21 @@ void turn_right_speed()
     yaw_adjust = -90;
     turn_state = TURN_RIGHT;
     /*if ((Angle_gz <= yaw_adjust + 5) && (Angle_gz >= yaw_adjust - 5)) //转到为
-    {
-        track_flag = 0;
-        turn_flag = 0;
-    } else //没有转到位*/
-   /* if(pathlength<650)
-    {
-        //car_state= CAR_TURN;
-        track_flag = 0;
-        turn_flag = 1;
-    }
-    else
-    {
-        track_flag = 0;
-        turn_flag = 0;
-    }*/
+     {
+     track_flag = 0;
+     turn_flag = 0;
+     } else //没有转到位*/
+    /* if(pathlength<650)
+     {
+     //car_state= CAR_TURN;
+     track_flag = 0;
+     turn_flag = 1;
+     }
+     else
+     {
+     track_flag = 0;
+     turn_flag = 0;
+     }*/
     //Get_Speed();
     Get_Speed();
     //Motor_PID(20, 20);
@@ -118,9 +120,10 @@ void model_select()
         case CAR_START:
             if (deliver_return_flag) // 返回
             {
-            } else if (!deliver_return_flag) // 送药
+            }
+            else if (!deliver_return_flag) // 送药
             {
-                if (NUM != 0) // 读取到数字
+                if (number != 0) // 读取到数字
                 {
                     //加上光电对管判断
                     car_state = CAR_TRACK;
@@ -134,7 +137,7 @@ void model_select()
             {
                 if (MV_stop_flag) //这里就只有openmv识别以后只有左右转不会停下来
                 {
-                	MV_stop_flag=false;
+                    MV_stop_flag = false;
                     if (back_dir[i] == 1) //倒退回溯右变左
                     {
                         car_state = CAR_TURN;
@@ -142,14 +145,16 @@ void model_select()
                         i--;
                         track_flag = 0;
                         turn_flag = 1;
-                    } else if (back_dir[i] == 2) //左变右
+                    }
+                    else if (back_dir[i] == 2) //左变右
                     {
                         car_state = CAR_TURN;
                         turn_state = TURN_LEFT;
                         i--;
                         track_flag = 0;
                         turn_flag = 1;
-                    } else
+                    }
+                    else
                     {
                         car_state = CAR_TRACK;
                         turn_state = TURN_STRAIGHT;
@@ -158,21 +163,23 @@ void model_select()
                         turn_flag = 0;
                     }
 
-                } else if (MV_end_flag)
+                }
+                else if (MV_end_flag)
                 {
-                	MV_end_flag=false;
+                    MV_end_flag = false;
                     car_state = CAR_STOP;
                     stop_state = STOP_END;
                     track_flag = 1;
                     turn_flag = 0;
-                } else
+                }
+                else
                 {
                     car_state = CAR_TRACK;
-                    turn_state = TURN_STRAIGHT;
                     track_flag = 1;
                     turn_flag = 0;
                 }
-            } else if (!deliver_return_flag) // 送药
+            }
+            else if (!deliver_return_flag) // 送药
             {
                 if (K210_stop_flag) //只要不为0就会先原地停
                 {
@@ -180,10 +187,11 @@ void model_select()
                     stop_state = STOP_NUM;
                     track_flag = 0;
                     turn_flag = 0;
-                } else if (MV_stop_flag) //需要判断是否会停下来是否到指定路口
+                }
+                else if (MV_stop_flag) //需要判断是否会停下来是否到指定路口
                 {
 
-                	MV_stop_flag=false;
+                    MV_stop_flag = false;
 //	            	if(no_see_num_first)//远端看得到第三个十字存在
 //	            	{
                     turn_state = turn_dir;
@@ -198,7 +206,8 @@ void model_select()
                     else if (turn_dir == 2)
                     {
                         yaw_adjust = Angle_gz - 90; //右转度数减小
-                    } else if (turn_dir == 3)
+                    }
+                    else if (turn_dir == 3)
                     {
                         yaw_adjust = Angle_gz - 180;
                     }
@@ -216,39 +225,44 @@ void model_select()
 //						turn_flag=0;
 //	            	}
 
-                } else if (NUM == 1)
-                {
-                    car_state = CAR_TURN;
-                    turn_state = TURN_LEFT;
-                    track_flag = 0;
-                    turn_flag = 0;
+                    else if (number == 1)
+                    {
+                        car_state = CAR_TURN;
+                        turn_state = TURN_LEFT;
+                        track_flag = 0;
+                        turn_flag = 0;
 #if USE_GYRO == 1
-                    yaw_adjust = Angle_gz + 90;
-                    if (yaw_adjust > 360)
-                        yaw_adjust %= 360;
-                    else if (yaw_adjust < 0)
-                        yaw_adjust = (yaw_adjust + 360) % 360;
+                        yaw_adjust = Angle_gz + 90;
+                        if (yaw_adjust > 360)
+                            yaw_adjust %= 360;
+                        else if (yaw_adjust < 0)
+                            yaw_adjust = (yaw_adjust + 360) % 360;
 #endif
-                } else if (NUM == 2)
-                {
-                    car_state = CAR_TURN;
-                    turn_state = TURN_RIGHT;
-                    track_flag = 0;
-                    turn_flag = 0;
+                    }
+                    else if (number == 2)
+                    {
+                        car_state = CAR_TURN;
+                        turn_state = TURN_RIGHT;
+                        track_flag = 0;
+                        turn_flag = 0;
 #if USE_GYRO == 1
-                    yaw_adjust = Angle_gz - 90;
-                    if (yaw_adjust > 360)
-                        yaw_adjust %= 360;
-                    else if (yaw_adjust < 0)
-                        yaw_adjust = (yaw_adjust + 360) % 360;
+                        yaw_adjust = Angle_gz - 90;
+                        if (yaw_adjust > 360)
+                            yaw_adjust %= 360;
+                        else if (yaw_adjust < 0)
+                            yaw_adjust = (yaw_adjust + 360) % 360;
 #endif
-                } else if (MV_end_flag)
+                    }
+
+                }
+                else if (MV_end_flag)
                 {
-                	MV_end_flag=false;
+                    MV_end_flag = false;
                     car_state = CAR_STOP;
                     stop_state = STOP_END;
                     turn_state = TURN_STRAIGHT;
-                } else
+                }
+                else
                 {
                     car_state = CAR_TRACK;
                     track_flag = 1;
@@ -257,6 +271,14 @@ void model_select()
             }
             break;
         case CAR_TURN: // 转向函数
+            if (turn_finish_flag) // 转向完成，继续巡线
+            {
+                car_state = CAR_TRACK;
+                turn_state = TURN_STRAIGHT;
+                track_flag = 0;
+                turn_flag = 0;
+
+            }
             switch (turn_state)
             {
                 case TURN_STRAIGHT:
@@ -266,15 +288,16 @@ void model_select()
                     //yaw_ djust-=90;//假设左转度数减小
                     //yaw_adjust=(yaw_adjust+360)%360;
 #if USE_GYRO ==1
-                    if ((Angle_gz <= yaw_adjust + 5)
-                            && (Angle_gz >= yaw_adjust - 5))			//转到为
+                    if ((Angle_gz <= yaw_adjust + 10)
+                            && (Angle_gz >= yaw_adjust - 10))			//转到为
 #else
 			if (pathlength > 650)
 
 #endif
                     {
                         turn_finish_flag = 1;
-                    } else	        	//没有转到位
+                    }
+                    else	        	//没有转到位
                     {
                         car_state = CAR_TURN;
                         turn_state = TURN_LEFT;
@@ -292,7 +315,8 @@ void model_select()
 #endif
                     {
                         turn_finish_flag = 1;
-                    } else
+                    }
+                    else
                     {
                         car_state = CAR_TURN;
                         turn_state = TURN_RIGHT;
@@ -320,10 +344,11 @@ void model_select()
             if (pathlength > 1300)
 
 #endif
-	        //转到位
+                    //转到位
                     {
                         turn_finish_flag = 1;
-                    } else  //没有转到位
+                    }
+                    else  //没有转到位
                     {
                         car_state = CAR_TURN;
                         turn_state = TURN_BACK;
@@ -342,14 +367,6 @@ void model_select()
 //					turn_flag=1;
 //	        	}
                     break;
-            }
-            if (turn_finish_flag) // 转向完成，继续巡线
-            {
-                car_state = CAR_TRACK;
-                turn_state = TURN_STRAIGHT;
-                track_flag = 0;
-                turn_flag = 0;
-
             }
             break;
         case CAR_STOP:
@@ -400,7 +417,8 @@ void model_select()
                         turn_state = TURN_BACK;
                         track_flag = 0;
                         turn_flag = 0;
-                    } else
+                    }
+                    else
                     {
                         car_state = CAR_STOP;
                         stop_state = STOP_END;

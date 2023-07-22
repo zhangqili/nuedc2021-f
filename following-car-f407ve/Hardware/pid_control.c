@@ -139,7 +139,8 @@ void follow_speed_adjust(void)
 #endif
 	else
 	{
-	    Motor_PID(0,0);
+	    __HAL_TIM_SET_COMPARE(&htim2,TIM_CHANNEL_1, 0);//180为死区电压对应的值
+	    __HAL_TIM_SET_COMPARE(&htim2,TIM_CHANNEL_2, 0);
 //		motor_pid_l.pidout = 0;
 //		motor_pid_r.pidout = 0;
 //		give_pwm();
@@ -158,8 +159,8 @@ void pid_inti(PID *pid)
 void PidIncCtrl(PID *pid)
 {
   pid->last_pidout = pid->pidout;
-  pid->instate+=pid->errdat*pid->iGain;
-  pid->ilimit=pid->instate>500?0:pid->instate;
+  //pid->instate+=pid->errdat*pid->iGain;
+  //pid->ilimit=pid->instate>500?0:pid->instate;
   pid->pidout += pid->pGain * (pid->errdat - pid->perr)
       + pid->iGain * pid->errdat
       + pid->dGain * (pid->errdat - 2 * pid->perr + pid->lastperr_errdat);
@@ -232,7 +233,7 @@ void Turn_Control(void)
 //单独小车循迹
 void Track(uint8_t expect_speed)
 {
-  defult = expect_speed;
+  //defult = expect_speed;
   Turn.errdat = bias_error * 0.7 + Turn.lastperr_errdat * 0.3;
 //		if(fabsf(Turn.errdat)>15)
 //			Turn.pGain=25;
@@ -243,7 +244,6 @@ void Track(uint8_t expect_speed)
   Speed_differ = -Turn.pidout;
   speed_l = defult + Speed_differ;
   speed_r = defult - Speed_differ;
-  Get_Speed();
   Motor_PID(speed_l, speed_r);
   Turn.lastperr_errdat = Turn.errdat;
 }

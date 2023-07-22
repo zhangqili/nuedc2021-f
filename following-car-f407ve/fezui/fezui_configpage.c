@@ -78,8 +78,8 @@ void configpage_draw(lefl_page_t *page)
   sprintf(fezui_tempstr,"%ld",fezui_fps);
   u8g2_DrawStr(&u8g2, 90, ITEM_HEIGHT*7, fezui_tempstr);
 
-  sprintf(fezui_tempstr,"%d",Communication_RX_Count);
-  u8g2_DrawStr(&u8g2, 64, ITEM_HEIGHT*8, fezui_tempstr);
+  sprintf(fezui_tempstr,"CAR:%d",car_state);
+  u8g2_DrawStr(&u8g2, 0, ITEM_HEIGHT*8, fezui_tempstr);
   /*
   for (uint8_t i = 0; i < configmenu.len; i++)
   {
