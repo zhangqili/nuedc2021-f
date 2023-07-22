@@ -225,7 +225,7 @@ void model_select()
 //						turn_flag=0;
 //	            	}
 
-                    else if (number == 1)
+                    if (number == 1)
                     {
                         car_state = CAR_TURN;
                         turn_state = TURN_LEFT;
@@ -288,8 +288,8 @@ void model_select()
                     //yaw_ djust-=90;//假设左转度数减小
                     //yaw_adjust=(yaw_adjust+360)%360;
 #if USE_GYRO ==1
-                    if ((Angle_gz <= yaw_adjust + 10)
-                            && (Angle_gz >= yaw_adjust - 10))			//转到为
+                    if ((Angle_gz <= yaw_adjust + 3)
+                            && (Angle_gz >= yaw_adjust - 3))			//转到为
 #else
 			if (pathlength > 650)
 

@@ -21,17 +21,32 @@
 #include "usart.h"
 
 /* USER CODE BEGIN 0 */
-uint8_t USART_RX_BUF[USART_REC_LEN];     //????
-uint8_t USART_RX_BYTE;
+#include <stdio.h>
 
-uint8_t flag;
-uint8_t state;
-uint8_t recv_cnt;
-uint16_t header;
-uint8_t pkt_len;
-uint8_t USART_RX_CNT=0;
-uint8_t USART_RX_FLG=0;
-uint8_t USART_RX_STR[16]={0};
+#include <stdio.h>
+
+#ifdef __GNUC__
+int __io_putchar(int ch)
+{
+    return ch;
+}
+#else
+int fputc(int ch, FILE *stream)
+{
+    return ch;
+}
+#endif
+
+ /******************************************************************
+     *@brief  Retargets the C library printf  function to the USART.
+     *@param  None
+     *@retval None
+ ******************************************************************/
+PUTCHAR_PROTOTYPE
+{
+    HAL_UART_Transmit(&huart1, (uint8_t *)&ch,1,0xFFFF);
+    return ch;
+}
 
 /* USER CODE END 0 */
 

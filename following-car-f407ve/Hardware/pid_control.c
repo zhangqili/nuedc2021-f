@@ -99,11 +99,11 @@ void follow_speed_adjust(void)
 	{
 		if(turn_state == TURN_LEFT)
 		{
-			Motor_PID(-10, 10);
+			Motor_PID(0, 10);
 		}
 		else if(turn_state == TURN_RIGHT)
 		{
-			Motor_PID(10, -10);
+			Motor_PID(10, 0);
 		}
 		else if(turn_state == TURN_BACK)
 		{
@@ -241,7 +241,7 @@ void Track(uint8_t expect_speed)
 //			Turn.pGain=20;
   //Turn.errdat=0;
   PidLocCtrl(&Turn, 0);
-  Speed_differ = -Turn.pidout;
+  Speed_differ = Turn.pidout;
   speed_l = defult + Speed_differ;
   speed_r = defult - Speed_differ;
   Motor_PID(speed_l, speed_r);

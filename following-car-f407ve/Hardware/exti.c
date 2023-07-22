@@ -72,7 +72,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			//Turn.pGain=23;
 			//Turn.dGain=30;
 //			local.pGain=1;
-	        Turn.pGain=10;
+	        Turn.pGain=20;
 			motor_pid_l.pGain=100;
 			motor_pid_l.iGain=20;
 			motor_pid_r.pGain=100;
@@ -89,6 +89,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 //			}
             //Get_Speed();
             //Track(20);
+			Get_Speed();
             follow_speed_adjust();
             //local_speed_speed();
             /*

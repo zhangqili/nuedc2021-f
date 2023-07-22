@@ -4,7 +4,7 @@ LED(3).on()
 uart = UART(3, 115200, timeout_char=1000)
 #u_start=bytearray([0xb3,0xb3])
 #u_over=bytearray([0x0d,0x0a])
-GRAYSCALE_THRESHOLD = [(20, 39, 68, 22, -32, 51)]#巡线的阈值
+GRAYSCALE_THRESHOLD = [(63, 22, 9, 72, 3, 66)]#巡线的阈值
 
 
 #摄像头设置
@@ -132,7 +132,8 @@ while(True):
     print('cross_finish = '+str(cross_finish))
     print('n_1 = '+str(n_1))
     print('n_2 = '+str(n_2))
+    print('stop_buf = '+str(stop_buf))
     output_str="\x00%c\x01%c\x05" % (int(angle), stop_buf)
     #uart.write(u_start)
     uart.write(output_str)
-    #delay_ms(30)
+    #time.sleep_ms(10)
