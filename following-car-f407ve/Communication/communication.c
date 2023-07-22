@@ -61,8 +61,16 @@ void Communication_Unpack(UART_HandleTypeDef *huart)
         	  bias_error=(int8_t)USART3_RX_Buffer[1];
         	  if(USART3_RX_Buffer[3]==1)
         		  MV_stop_flag=true;
+              else
+              {
+                  MV_stop_flag=false;
+              }
         	  if(USART3_RX_Buffer[3]==2)
         		  MV_end_flag=true;
+              else
+              {
+                  MV_end_flag=false;
+              }
           }
           HAL_UART_Receive_DMA(huart, USART3_RX_Buffer, BUFFER_LENGTH);
       }

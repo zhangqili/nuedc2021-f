@@ -13,19 +13,18 @@
 #include "main.h"
 #include "stage.h"
 
-uint8_t USART1_RX_BUF[USART1_REC_LEN];//���ջ���,���USART_REC_LEN���ֽ�.
-uint16_t USART1_RX_STA=0;//����״̬���//bit15��������ɱ�־��bit14~0�����յ�����Ч�ֽ���Ŀ
-uint8_t USART1_NewData;//��ǰ�����жϽ��յ�1���ֽ����ݵĻ���
+uint8_t USART1_RX_BUF[USART1_REC_LEN]; //���ջ���,���USART_REC_LEN���ֽ�.
+uint16_t USART1_RX_STA = 0; //����״̬���//bit15��������ɱ�־��bit14~0�����յ�����Ч�ֽ���Ŀ
+uint8_t USART1_NewData; //��ǰ�����жϽ��յ�1���ֽ����ݵĻ���
 uint8_t obstacle_flag = 0;
-int count=0;
+int count = 0;
 
 #define OVERTAKE_CAR
 
-void  HAL_UART_RxCpltCallback(UART_HandleTypeDef  *huart)//�����жϻص�����
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) //�����жϻص�����
 {
-     
-}
 
+}
 
 //************************************************//
 
@@ -60,26 +59,20 @@ void  HAL_UART_RxCpltCallback(UART_HandleTypeDef  *huart)//�����жϻص
 //}
 //int a=0 ,b=0;
 //uint16_t pathlength=0;
-uint32_t count1 = 0;
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-	
 
-	if(htim->Instance == TIM6)
-	{	
-//		  if(count>=0&&count<=500)
-//		{
-			//Turn.pGain=23;
-			//Turn.dGain=30;
-//			local.pGain=1;
-	        Turn.pGain=20;
-			motor_pid_l.pGain=100;
-			motor_pid_l.iGain=20;
-			motor_pid_r.pGain=100;
-			motor_pid_r.iGain=20;
-			//expectlength=600;
-			//turn_left_speed();
-			model_select();
+    if (htim->Instance == TIM6)
+    {
+        tick_count++;
+        Turn.pGain = 20;
+        motor_pid_l.pGain = 100;
+        motor_pid_l.iGain = 20;
+        motor_pid_r.pGain = 100;
+        motor_pid_r.iGain = 20;
+        //expectlength=600;
+        //turn_left_speed();
+        model_select();
 //			track_flag=1;
 //			turn_flag=0;
 //			if((Angle_gz>90)&&(Angle_gz<100))
@@ -87,53 +80,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 //			    track_flag=0;
 //			    turn_flag=0;
 //			}
-            //Get_Speed();
-            //Track(20);
-			Get_Speed();
-            follow_speed_adjust();
-            //local_speed_speed();
-            /*
-#define INTERVAL_1 200
-			count1++;
-			if(count1<INTERVAL_1*1)
-			{
-	              Give_Motor_PWM(4000, 0);
-			}
-			else if(count1<INTERVAL_1*2)
-			{
-	              Give_Motor_PWM(-4000, 0);
-			}
-            else if(count1<INTERVAL_1*3)
-            {
-                  Give_Motor_PWM(0, 4000);
-            }
-            else if(count1<INTERVAL_1*4)
-            {
-                  Give_Motor_PWM(0, -4000);
-            }
-            else if(count1<INTERVAL_1*5)
-            {
-                  Give_Motor_PWM(4000, 4000);
-            }
-            else if(count1<INTERVAL_1*6)
-            {
-                  Give_Motor_PWM(-4000, 4000);
-            }
-            else if(count1<INTERVAL_1*7)
-            {
-                  Give_Motor_PWM(4000, -4000);
-            }
-            else if(count1<INTERVAL_1*8)
-            {
-                  Give_Motor_PWM(-4000, -4000);
-            }
-            */
+        //Get_Speed();
+        //Track(20);
+        Get_Speed();
+        follow_speed_adjust();
+        //local_speed_speed();
 //		}
-//		count++;
-//		if(count>501)
-//		{
-//			count=501;
-//			Give_Motor_PWM(0,0);
-//		}
-	}
+    }
 }

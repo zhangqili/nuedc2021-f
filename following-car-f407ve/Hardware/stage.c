@@ -4,6 +4,7 @@
  *  Created on: Jul 15, 2023
  *      Author: fby
  */
+#include "main.h"
 #include "stage.h"
 #include "stdio.h"
 #include "stdint.h"
@@ -127,6 +128,7 @@ void model_select()
                 {
                     //加上光电对管判断
                     car_state = CAR_TRACK;
+                    LOG_S(car_state,CAR_TRACK);
                     track_flag = 1;
                     turn_flag = 0;
                 }
@@ -142,6 +144,8 @@ void model_select()
                     {
                         car_state = CAR_TURN;
                         turn_state = TURN_RIGHT;
+                        LOG_S(car_state,CAR_TURN)
+                        LOG_S(turn_state,TURN_RIGHT)
                         i--;
                         track_flag = 0;
                         turn_flag = 1;
@@ -150,6 +154,8 @@ void model_select()
                     {
                         car_state = CAR_TURN;
                         turn_state = TURN_LEFT;
+                        LOG_S(car_state,CAR_TURN)
+                        LOG_S(turn_state,TURN_LEFT)
                         i--;
                         track_flag = 0;
                         turn_flag = 1;
@@ -158,7 +164,8 @@ void model_select()
                     {
                         car_state = CAR_TRACK;
                         turn_state = TURN_STRAIGHT;
-                        i--;
+                        LOG_S(car_state,CAR_TURN)
+                        LOG_S(turn_state,TURN_STRAIGHT)
                         track_flag = 1;
                         turn_flag = 0;
                     }
@@ -169,12 +176,15 @@ void model_select()
                     MV_end_flag = false;
                     car_state = CAR_STOP;
                     stop_state = STOP_END;
+                    LOG_S(car_state,CAR_STOP)
+                    LOG_S(stop_state,STOP_END)
                     track_flag = 1;
                     turn_flag = 0;
                 }
                 else
                 {
                     car_state = CAR_TRACK;
+                    //LOG_S(car_state,CAR_TRACK)
                     track_flag = 1;
                     turn_flag = 0;
                 }
@@ -185,6 +195,8 @@ void model_select()
                 {
                     car_state = CAR_STOP;
                     stop_state = STOP_NUM;
+                    LOG_S(car_state,CAR_STOP)
+                    LOG_S(stop_state,STOP_NUM)
                     track_flag = 0;
                     turn_flag = 0;
                 }
@@ -197,6 +209,8 @@ void model_select()
                     turn_state = turn_dir;
                     car_state = CAR_TURN;
                     stop_state = STOP_CROSSING;
+                    LOG_S(car_state,CAR_TURN)
+                    LOG_S(stop_state,STOP_CROSSING)
                     track_flag = 0;
                     turn_flag = 0;
                     //yaw_adjust=Angle_gz;
@@ -229,6 +243,8 @@ void model_select()
                     {
                         car_state = CAR_TURN;
                         turn_state = TURN_LEFT;
+                        LOG_S(car_state,CAR_TURN)
+                        LOG_S(stop_state,TURN_LEFT)
                         track_flag = 0;
                         turn_flag = 0;
 #if USE_GYRO == 1
@@ -243,6 +259,8 @@ void model_select()
                     {
                         car_state = CAR_TURN;
                         turn_state = TURN_RIGHT;
+                        LOG_S(car_state,CAR_TURN)
+                        LOG_S(turn_state,TURN_RIGHT)
                         track_flag = 0;
                         turn_flag = 0;
 #if USE_GYRO == 1
@@ -261,10 +279,14 @@ void model_select()
                     car_state = CAR_STOP;
                     stop_state = STOP_END;
                     turn_state = TURN_STRAIGHT;
+                    LOG_S(car_state,CAR_STOP)
+                    LOG_S(stop_state,STOP_END)
+                    LOG_S(turn_state,TURN_STRAIGHT)
                 }
                 else
                 {
                     car_state = CAR_TRACK;
+                    //LOG_S(car_state,CAR_TRACK)
                     track_flag = 1;
                     turn_flag = 0;
                 }
@@ -275,6 +297,8 @@ void model_select()
             {
                 car_state = CAR_TRACK;
                 turn_state = TURN_STRAIGHT;
+                LOG_S(car_state,CAR_TRACK)
+                LOG_S(turn_state,TURN_STRAIGHT)
                 track_flag = 0;
                 turn_flag = 0;
 
@@ -301,6 +325,8 @@ void model_select()
                     {
                         car_state = CAR_TURN;
                         turn_state = TURN_LEFT;
+                        //LOG_S(car_state,CAR_TURN)
+                        //LOG_S(turn_state,TURN_LEFT)
                         track_flag = 0;
                         turn_flag = 1;
                     }
@@ -320,6 +346,8 @@ void model_select()
                     {
                         car_state = CAR_TURN;
                         turn_state = TURN_RIGHT;
+                        //LOG_S(car_state,CAR_TURN)
+                        //LOG_S(turn_state,TURN_RIGHT)
                         track_flag = 0;
                         turn_flag = 1;
                     }
@@ -352,6 +380,8 @@ void model_select()
                     {
                         car_state = CAR_TURN;
                         turn_state = TURN_BACK;
+                        //LOG_S(car_state,CAR_TURN)
+                        //LOG_S(turn_state,TURN_BACK)
                         track_flag = 0;
                         turn_flag = 1;
                     }
@@ -379,6 +409,8 @@ void model_select()
                         turn_state = turn_dir; // 需要储存转向数据
                         car_state = CAR_TRACK;
                         stop_state = STOP_NUM;
+                        LOG_S(car_state,CAR_TURN)
+                        LOG_S(stop_state,STOP_NUM)
                         back_dir[i] = turn_dir; // 需要储存转向数据
                         i++;
                         track_flag = 1;
@@ -399,12 +431,16 @@ void model_select()
                         turn_state = TURN_STRAIGHT; // 需要储存转向数据
                         car_state = CAR_STOP;
                         stop_state = STOP_NUM;
+                        //LOG_S(car_state,CAR_STOP)
+                        //LOG_S(turn_state,TURN_STRAIGHT)
+                        //LOG_S(stop_state,STOP_NUM)
                         track_flag = 0;
                         turn_flag = 0;
                     }
                     break;
                 case STOP_CROSSING:  //只有走到所需数字前的十字才会进入停止状态这里只是一个中转
                     car_state = CAR_TURN;
+                    LOG_S(car_state,CAR_TURN)
                     track_flag = 0;
                     turn_flag = 0;
                     break;
@@ -415,6 +451,8 @@ void model_select()
                         //deliver_return_flag = true;
                         car_state = CAR_TURN;
                         turn_state = TURN_BACK;
+                        LOG_S(car_state,CAR_TURN)
+                        LOG_S(turn_state,TURN_BACK)
                         track_flag = 0;
                         turn_flag = 0;
                     }
@@ -422,6 +460,8 @@ void model_select()
                     {
                         car_state = CAR_STOP;
                         stop_state = STOP_END;
+                        //LOG_S(car_state,CAR_STOP)
+                        //LOG_S(stop_state,STOP_END)
                         track_flag = 0;
                         turn_flag = 0;
                     }

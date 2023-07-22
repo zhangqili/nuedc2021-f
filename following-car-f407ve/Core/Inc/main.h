@@ -61,11 +61,12 @@ extern float pitch,roll,yaw;
 extern int PWMA,PWMB;
 
 extern uint8_t color_flag;
+extern uint32_t tick_count;
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
-
+#define LOG_S(state_t,state) printf("%s -> %s : %6d\n",#state_t,#state,tick_count);
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/

@@ -84,6 +84,7 @@ uint8_t *f_ptr;
 uint8_t uart1_buf[8];
 uint8_t color_flag = 0;
 uint8_t tempEncoder = 0;
+uint32_t tick_count = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -137,6 +138,7 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
   MX_UART4_Init();
+  MX_UART5_Init();
   /* USER CODE BEGIN 2 */
   fezui_init();
   /* PRESETS BEGIN */
@@ -208,7 +210,9 @@ int main(void)
   yaw_adjust=Angle_gz+90;
   car_state =CAR_START;
   //turn_state =TURN_LEFT;
-  number = 2;
+  number = 1;
+
+  LOG_S(hello, world)
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -221,7 +225,6 @@ int main(void)
     //tempEncoder=(motor_l.Encoder+motor_r.Encoder)/2;
     //HAL_UART_Transmit(&huart1,&tempEncoder,1,0xff);
     fezui_timer_handler();
-    printf("hello, world\n");
     //HAL_UART_Transmit(&huart1,"hello, world\n",13,0xff);
 
    // Give_Motor_PWM(4000, 4000);

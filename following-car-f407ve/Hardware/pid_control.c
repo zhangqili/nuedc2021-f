@@ -9,7 +9,7 @@
 #include "us100.h"
 #include <math.h>
 #include "stage.h"
-#define PWM_MAX_LIMIT 7000
+#define PWM_MAX_LIMIT 12000
 
 
 PID motor_pid_l; //���pid����
@@ -99,11 +99,11 @@ void follow_speed_adjust(void)
 	{
 		if(turn_state == TURN_LEFT)
 		{
-			Motor_PID(0, 10);
+			Motor_PID(0, 40);
 		}
 		else if(turn_state == TURN_RIGHT)
 		{
-			Motor_PID(10, 0);
+			Motor_PID(40, 0);
 		}
 		else if(turn_state == TURN_BACK)
 		{
@@ -139,8 +139,9 @@ void follow_speed_adjust(void)
 #endif
 	else
 	{
-	    __HAL_TIM_SET_COMPARE(&htim2,TIM_CHANNEL_1, 0);//180为死区电压对应的值
-	    __HAL_TIM_SET_COMPARE(&htim2,TIM_CHANNEL_2, 0);
+        Motor_PID(0,0);
+	    //__HAL_TIM_SET_COMPARE(&htim2,TIM_CHANNEL_1, 0);//180为死区电压对应的值
+	    //__HAL_TIM_SET_COMPARE(&htim2,TIM_CHANNEL_2, 0);
 //		motor_pid_l.pidout = 0;
 //		motor_pid_r.pidout = 0;
 //		give_pwm();
@@ -233,7 +234,7 @@ void Turn_Control(void)
 //单独小车循迹
 void Track(uint8_t expect_speed)
 {
-  //defult = expect_speed;
+  defult = expect_speed;
   Turn.errdat = bias_error * 0.7 + Turn.lastperr_errdat * 0.3;
 //		if(fabsf(Turn.errdat)>15)
 //			Turn.pGain=25;
