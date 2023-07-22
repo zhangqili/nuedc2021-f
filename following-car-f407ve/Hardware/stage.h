@@ -9,6 +9,7 @@
 #define STAGE_H_
 #include "stdio.h"
 #include "stdint.h"
+#include "stdbool.h"
 extern uint8_t track_flag;
 extern uint8_t turn_flag;
 extern int16_t yaw_adjust;
@@ -46,3 +47,7 @@ enum STOP_STATE
 extern	enum CAR_STATE car_state;
 extern	enum TURN_STATE turn_state;
 extern	enum STOP_STATE stop_state;
+
+extern bool MV_stop_flag;
+extern bool MV_end_flag;
+extern bool MV_main_flag;

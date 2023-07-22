@@ -47,7 +47,12 @@ extern uint8_t u##_TX_Length;
 #define Communication_Enable(huart,buf,len) HAL_UART_Receive_DMA(huart,buf,len);\
                                             __HAL_UART_ENABLE_IT(huart, UART_IT_IDLE);
 
+COM_DECLARE(USART1)
+COM_DECLARE(USART3)
 COM_DECLARE(UART4)
+
+extern uint16_t Communication_TX_Count;
+extern uint16_t Communication_RX_Count;
 
 void Communication_Unpack();
 

@@ -134,6 +134,7 @@ void model_select()
             {
                 if (MV_stop_flag) //这里就只有openmv识别以后只有左右转不会停下来
                 {
+                	MV_stop_flag=false;
                     if (back_dir[i] == 1) //倒退回溯右变左
                     {
                         car_state = CAR_TURN;
@@ -159,6 +160,7 @@ void model_select()
 
                 } else if (MV_end_flag)
                 {
+                	MV_end_flag=false;
                     car_state = CAR_STOP;
                     stop_state = STOP_END;
                     track_flag = 1;
@@ -180,6 +182,8 @@ void model_select()
                     turn_flag = 0;
                 } else if (MV_stop_flag) //需要判断是否会停下来是否到指定路口
                 {
+
+                	MV_stop_flag=false;
 //	            	if(no_see_num_first)//远端看得到第三个十字存在
 //	            	{
                     turn_state = turn_dir;
@@ -240,6 +244,7 @@ void model_select()
 #endif
                 } else if (MV_end_flag)
                 {
+                	MV_end_flag=false;
                     car_state = CAR_STOP;
                     stop_state = STOP_END;
                     turn_state = TURN_STRAIGHT;

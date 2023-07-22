@@ -11,6 +11,7 @@
 #include "pid_control.h"
 #include "stage.h"
 #include "motor_control.h"
+#include "communication.h"
 
 lefl_page_t configpage =
 { configpage_logic, configpage_draw, configpage_load };
@@ -39,22 +40,31 @@ void configpage_logic(lefl_page_t *page)
 void configpage_draw(lefl_page_t *page)
 {
   u8g2_SetFont(&u8g2, u8g2_font_6x12_tf);
+
   sprintf(fezui_tempstr,"L:%d",motor_l.Encoder);
   u8g2_DrawStr(&u8g2, 0, ITEM_HEIGHT, fezui_tempstr);
+
   sprintf(fezui_tempstr,"R:%d",motor_r.Encoder);
   u8g2_DrawStr(&u8g2, 43, ITEM_HEIGHT, fezui_tempstr);
+
   sprintf(fezui_tempstr,"C:%d",color_flag);
   u8g2_DrawStr(&u8g2, 88, ITEM_HEIGHT, fezui_tempstr);
+
   sprintf(fezui_tempstr,"b_err:%.0f",bias_error);
   u8g2_DrawStr(&u8g2, 0, ITEM_HEIGHT*2, fezui_tempstr);
+
   sprintf(fezui_tempstr,"out:%f",Turn.pidout);
   u8g2_DrawStr(&u8g2, 0, ITEM_HEIGHT*3, fezui_tempstr);
+
   sprintf(fezui_tempstr,"p_l:%4.0f",motor_pid_l.pidout);
   u8g2_DrawStr(&u8g2, 0, ITEM_HEIGHT*4, fezui_tempstr);
+
   sprintf(fezui_tempstr,"p_r:%4.0f",motor_pid_r.pidout);
   u8g2_DrawStr(&u8g2, 64, ITEM_HEIGHT*4, fezui_tempstr);
+
   sprintf(fezui_tempstr,"l_e:%d",speed_l);
   u8g2_DrawStr(&u8g2, 0, ITEM_HEIGHT*5, fezui_tempstr);
+
   sprintf(fezui_tempstr,"r_e:%d",speed_r);
   u8g2_DrawStr(&u8g2, 64, ITEM_HEIGHT*5, fezui_tempstr);
 
@@ -64,6 +74,12 @@ void configpage_draw(lefl_page_t *page)
 
   sprintf(fezui_tempstr,"yaw_adjust:%d",yaw_adjust);
   u8g2_DrawStr(&u8g2, 0, ITEM_HEIGHT*7, fezui_tempstr);
+
+  sprintf(fezui_tempstr,"%ld",fezui_fps);
+  u8g2_DrawStr(&u8g2, 90, ITEM_HEIGHT*7, fezui_tempstr);
+
+  sprintf(fezui_tempstr,"%d",Communication_RX_Count);
+  u8g2_DrawStr(&u8g2, 64, ITEM_HEIGHT*8, fezui_tempstr);
   /*
   for (uint8_t i = 0; i < configmenu.len; i++)
   {

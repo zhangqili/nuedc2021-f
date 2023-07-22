@@ -21,6 +21,7 @@ lefl_key_t key_back;
 uint8_t fezui_rest_countdown = SCREEN_REST_TIME;
 uint8_t fezui_debug;
 uint32_t fezui_run_time;
+uint32_t fezui_fps;
 /*
 enum USB_HID_KEYBOARD_SCAN_CODES *ansi_104_keycode[6][17] = {
         {KEY_ESC,KEY_F1,KEY_F2,KEY_F3,KEY_F4,KEY_F5,KEY_F6,KEY_F7,KEY_F8,KEY_F9,KEY_F10,KEY_F11,KEY_F12,KEY_PRINT_SCREEN,KEY_SCROLL_LOCK,KEY_PAUSE},

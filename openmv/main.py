@@ -133,3 +133,4 @@ while(True):
     output_str="\x00%c\x01%c\x05" % (int(angle), stop_buf)
     #uart.write(u_start)
     uart.write(output_str)
+    #delay_ms(30)

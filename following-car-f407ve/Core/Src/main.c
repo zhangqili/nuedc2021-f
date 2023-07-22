@@ -184,7 +184,7 @@ int main(void)
   //motor_pid_r.iGain=10;
   /* PRESETS END */
 
-  HAL_UART_Receive_IT(&huart2, &USART_RX_BYTE, 1);
+  //HAL_UART_Receive_IT(&huart2, &USART_RX_BYTE, 1);
   HAL_NVIC_DisableIRQ(EXTI15_10_IRQn); //ï¿½ï¿½NVICï¿½Ð¶Ï¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¹Ø±ï¿½EXTI12ï¿½Ð¶ï¿½
   //MPU6050_Init(); //ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½mpu6050
 //  __HAL_TIM_CLEAR_FLAG(&htim1,TIM_FLAG_UPDATE);
@@ -199,7 +199,9 @@ int main(void)
 
 
   atk_ms901m_uart_init(115200);
-  Communication_Enable(&huart4,UART4_RX_Buffer,BUFFER_LENGTH);
+  Communication_Enable(&huart4, UART4_RX_Buffer,BUFFER_LENGTH);
+  Communication_Enable(&huart3, USART3_RX_Buffer,BUFFER_LENGTH);
+  Communication_Enable(&huart1, USART1_RX_Buffer,BUFFER_LENGTH);
 
   yaw_adjust=Angle_gz+90;
   car_state =CAR_TURN;

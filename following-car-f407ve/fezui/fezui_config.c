@@ -44,6 +44,7 @@ void fezui_init()
 
 void fezui_timer_handler()
 {
+  fezui_fps++;
   lefl_key_update(&key_up, !HAL_GPIO_ReadPin(KEY1_GPIO_Port, KEY1_Pin));
   lefl_key_update(&key_down, !HAL_GPIO_ReadPin(KEY2_GPIO_Port, KEY2_Pin));
   lefl_key_update(&key_go, !HAL_GPIO_ReadPin(KEY3_GPIO_Port, KEY3_Pin));
