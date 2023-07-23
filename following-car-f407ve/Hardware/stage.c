@@ -23,13 +23,14 @@ bool MV_main_flag;
 bool deliver_return_flag; //假为送药真为让你返回
 bool turn_finish_flag;
 bool num_flag;   //k210识别到的数字是否所需，1代表停止识别到0代表没有继续前进
-
+lefl_stack_t stack={
+        .len=5,
+        .top=0
+};
 uint8_t number = 0;   //k210返回第一次识别到的数字
 uint8_t track_flag;
 uint8_t turn_flag;
-uint8_t turn_dir; //turn方向如果为left90
-uint8_t back_dir[4] = { 0 };
-uint8_t i = 0; //转弯次数
+uint16_t turn_dir; //turn方向如果为left90
 uint8_t no_see_num_first; //第三个十字路口 0 没有找到 1 找到//平时为1
 //uint8_t no_see_num_last;//远端先去左边  1左边有所需数字  0没有所需数字掉头
 uint8_t go_right = 0; //前往右边的远端
@@ -128,7 +129,7 @@ void model_select()
                 {
                     //加上光电对管判断
                     car_state = CAR_TRACK;
-                    LOG_S(car_state,CAR_TRACK);
+                    LOG_S(car_state, CAR_TRACK);
                     track_flag = 1;
                     turn_flag = 0;
                 }
@@ -140,23 +141,22 @@ void model_select()
                 if (MV_stop_flag) //这里就只有openmv识别以后只有左右转不会停下来
                 {
                     MV_stop_flag = false;
-                    if (back_dir[i] == 1) //倒退回溯右变左
+                    lefl_stack_pop(&stack, &turn_dir);
+                    if (turn_dir == TURN_LEFT) //倒退回溯右变左
                     {
                         car_state = CAR_TURN;
                         turn_state = TURN_RIGHT;
-                        LOG_S(car_state,CAR_TURN)
-                        LOG_S(turn_state,TURN_RIGHT)
-                        i--;
+                        LOG_S(car_state, CAR_TURN)
+                        LOG_S(turn_state, TURN_RIGHT)
                         track_flag = 0;
                         turn_flag = 1;
                     }
-                    else if (back_dir[i] == 2) //左变右
+                    else if (turn_dir == TURN_RIGHT) //左变右
                     {
                         car_state = CAR_TURN;
                         turn_state = TURN_LEFT;
-                        LOG_S(car_state,CAR_TURN)
-                        LOG_S(turn_state,TURN_LEFT)
-                        i--;
+                        LOG_S(car_state, CAR_TURN)
+                        LOG_S(turn_state, TURN_LEFT)
                         track_flag = 0;
                         turn_flag = 1;
                     }
@@ -164,8 +164,8 @@ void model_select()
                     {
                         car_state = CAR_TRACK;
                         turn_state = TURN_STRAIGHT;
-                        LOG_S(car_state,CAR_TURN)
-                        LOG_S(turn_state,TURN_STRAIGHT)
+                        LOG_S(car_state, CAR_TURN)
+                        LOG_S(turn_state, TURN_STRAIGHT)
                         track_flag = 1;
                         turn_flag = 0;
                     }
@@ -174,12 +174,15 @@ void model_select()
                 else if (MV_end_flag)
                 {
                     MV_end_flag = false;
-                    car_state = CAR_STOP;
-                    stop_state = STOP_END;
-                    LOG_S(car_state,CAR_STOP)
-                    LOG_S(stop_state,STOP_END)
-                    track_flag = 1;
-                    turn_flag = 0;
+                    if(turn_state==TURN_STRAIGHT)
+                    {
+                        car_state = CAR_STOP;
+                        stop_state = STOP_END;
+                        LOG_S(car_state, CAR_STOP)
+                        LOG_S(stop_state, STOP_END)
+                        track_flag = 1;
+                        turn_flag = 0;
+                    }
                 }
                 else
                 {
@@ -195,8 +198,8 @@ void model_select()
                 {
                     car_state = CAR_STOP;
                     stop_state = STOP_NUM;
-                    LOG_S(car_state,CAR_STOP)
-                    LOG_S(stop_state,STOP_NUM)
+                    LOG_S(car_state, CAR_STOP)
+                    LOG_S(stop_state, STOP_NUM)
                     track_flag = 0;
                     turn_flag = 0;
                 }
@@ -206,24 +209,37 @@ void model_select()
                     MV_stop_flag = false;
 //	            	if(no_see_num_first)//远端看得到第三个十字存在
 //	            	{
-                    turn_state = turn_dir;
-                    car_state = CAR_TURN;
+                    car_state = CAR_STOP;
                     stop_state = STOP_CROSSING;
-                    LOG_S(car_state,CAR_TURN)
-                    LOG_S(stop_state,STOP_CROSSING)
+                    LOG_S(car_state, CAR_STOP)
+                    LOG_S(stop_state, STOP_CROSSING)
                     track_flag = 0;
                     turn_flag = 0;
                     //yaw_adjust=Angle_gz;
                     angle = Angle_gz;
-                    if (turn_dir == 1)
-                        yaw_adjust = Angle_gz + 90; //左转度数增大
-                    else if (turn_dir == 2)
+                    switch (turn_dir)
                     {
-                        yaw_adjust = Angle_gz - 90; //右转度数减小
-                    }
-                    else if (turn_dir == 3)
-                    {
-                        yaw_adjust = Angle_gz - 180;
+                        case TURN_STRAIGHT:
+                            turn_state = TURN_STRAIGHT;
+                            LOG_S(turn_state, TURN_STRAIGHT)
+                            break;
+                        case TURN_LEFT:
+                            turn_state = TURN_LEFT;
+                            LOG_S(turn_state, TURN_LEFT)
+                            yaw_adjust = Angle_gz + 90;
+                            break;
+                        case TURN_RIGHT:
+                            turn_state = TURN_RIGHT;
+                            LOG_S(turn_state, TURN_RIGHT)
+                            yaw_adjust = Angle_gz - 90;
+                            break;
+                        case TURN_BACK:
+                            turn_state = TURN_BACK;
+                            LOG_S(turn_state, TURN_BACK)
+                            yaw_adjust = Angle_gz - 180;
+                            break;
+                        default:
+                            break;
                     }
                     if (yaw_adjust > 360)
                         yaw_adjust %= 360;
@@ -243,8 +259,8 @@ void model_select()
                     {
                         car_state = CAR_TURN;
                         turn_state = TURN_LEFT;
-                        LOG_S(car_state,CAR_TURN)
-                        LOG_S(stop_state,TURN_LEFT)
+                        LOG_S(car_state, CAR_TURN)
+                        LOG_S(stop_state, TURN_LEFT)
                         track_flag = 0;
                         turn_flag = 0;
 #if USE_GYRO == 1
@@ -259,8 +275,8 @@ void model_select()
                     {
                         car_state = CAR_TURN;
                         turn_state = TURN_RIGHT;
-                        LOG_S(car_state,CAR_TURN)
-                        LOG_S(turn_state,TURN_RIGHT)
+                        LOG_S(car_state, CAR_TURN)
+                        LOG_S(turn_state, TURN_RIGHT)
                         track_flag = 0;
                         turn_flag = 0;
 #if USE_GYRO == 1
@@ -276,12 +292,97 @@ void model_select()
                 else if (MV_end_flag)
                 {
                     MV_end_flag = false;
-                    car_state = CAR_STOP;
-                    stop_state = STOP_END;
-                    turn_state = TURN_STRAIGHT;
-                    LOG_S(car_state,CAR_STOP)
-                    LOG_S(stop_state,STOP_END)
-                    LOG_S(turn_state,TURN_STRAIGHT)
+                    if(turn_state==TURN_STRAIGHT)
+                    {
+                        car_state = CAR_STOP;
+                        stop_state = STOP_END;
+                        LOG_S(car_state, CAR_STOP)
+                        LOG_S(stop_state, STOP_END)
+                        track_flag = 1;
+                        turn_flag = 0;
+                    }
+                    else
+                    {
+
+                        car_state = CAR_STOP;
+                        stop_state = STOP_CROSSING;
+                        LOG_S(car_state, CAR_STOP)
+                        LOG_S(stop_state, STOP_CROSSING)
+                        track_flag = 0;
+                        turn_flag = 0;
+                        //yaw_adjust=Angle_gz;
+                        angle = Angle_gz;
+                        switch (turn_dir)
+                        {
+                            case TURN_STRAIGHT:
+                                turn_state = TURN_STRAIGHT;
+                                LOG_S(turn_state, TURN_STRAIGHT)
+                                break;
+                            case TURN_LEFT:
+                                turn_state = TURN_LEFT;
+                                LOG_S(turn_state, TURN_LEFT)
+                                yaw_adjust = Angle_gz + 90;
+                                break;
+                            case TURN_RIGHT:
+                                turn_state = TURN_RIGHT;
+                                LOG_S(turn_state, TURN_RIGHT)
+                                yaw_adjust = Angle_gz - 90;
+                                break;
+                            case TURN_BACK:
+                                turn_state = TURN_BACK;
+                                LOG_S(turn_state, TURN_BACK)
+                                yaw_adjust = Angle_gz - 180;
+                                break;
+                            default:
+                                break;
+                        }
+                        if (yaw_adjust > 360)
+                            yaw_adjust %= 360;
+                        else if (yaw_adjust < 0)
+                            yaw_adjust = (yaw_adjust + 360) % 360;
+                        //stop_state = STOP_CROSSING;
+    //                  }
+    //                  else//不存在先左转
+    //                  {
+    //                      car_state= CAR_TURN;
+    //                      turn_state = TURN_LEFT;
+    //                      track_flag=0;
+    //                      turn_flag=0;
+    //                  }
+
+                        if (number == 1)
+                        {
+                            car_state = CAR_TURN;
+                            turn_state = TURN_LEFT;
+                            LOG_S(car_state, CAR_TURN)
+                            LOG_S(stop_state, TURN_LEFT)
+                            track_flag = 0;
+                            turn_flag = 0;
+    #if USE_GYRO == 1
+                            yaw_adjust = Angle_gz + 90;
+                            if (yaw_adjust > 360)
+                                yaw_adjust %= 360;
+                            else if (yaw_adjust < 0)
+                                yaw_adjust = (yaw_adjust + 360) % 360;
+    #endif
+                        }
+                        else if (number == 2)
+                        {
+                            car_state = CAR_TURN;
+                            turn_state = TURN_RIGHT;
+                            LOG_S(car_state, CAR_TURN)
+                            LOG_S(turn_state, TURN_RIGHT)
+                            track_flag = 0;
+                            turn_flag = 0;
+    #if USE_GYRO == 1
+                            yaw_adjust = Angle_gz - 90;
+                            if (yaw_adjust > 360)
+                                yaw_adjust %= 360;
+                            else if (yaw_adjust < 0)
+                                yaw_adjust = (yaw_adjust + 360) % 360;
+    #endif
+                        }
+                    }
                 }
                 else
                 {
@@ -293,12 +394,17 @@ void model_select()
             }
             break;
         case CAR_TURN: // 转向函数
+            MV_stop_flag = false;
+            MV_end_flag = false;
+            K210_stop_flag = false;
             if (turn_finish_flag) // 转向完成，继续巡线
             {
+                turn_finish_flag = false;
+                //LOG_S(turn_finish, false)
                 car_state = CAR_TRACK;
                 turn_state = TURN_STRAIGHT;
-                LOG_S(car_state,CAR_TRACK)
-                LOG_S(turn_state,TURN_STRAIGHT)
+                LOG_S(car_state, CAR_TRACK)
+                LOG_S(turn_state, TURN_STRAIGHT)
                 track_flag = 0;
                 turn_flag = 0;
 
@@ -306,7 +412,14 @@ void model_select()
             switch (turn_state)
             {
                 case TURN_STRAIGHT:
-                    turn_finish_flag = 1;
+                    turn_finish_flag = false;
+                    car_state = CAR_TRACK;
+                    turn_state = TURN_STRAIGHT;
+                    LOG_S(car_state, CAR_TRACK)
+                    LOG_S(turn_state, TURN_STRAIGHT)
+                    track_flag = 0;
+                    turn_flag = 0;
+                    //LOG_S(turn_finish, false)
                     break;
                 case TURN_LEFT:
                     //yaw_ djust-=90;//假设左转度数减小
@@ -320,6 +433,7 @@ void model_select()
 #endif
                     {
                         turn_finish_flag = 1;
+                        //LOG_S(turn_finish, true)
                     }
                     else	        	//没有转到位
                     {
@@ -341,6 +455,7 @@ void model_select()
 #endif
                     {
                         turn_finish_flag = 1;
+                        //LOG_S(turn_finish, true)
                     }
                     else
                     {
@@ -375,6 +490,7 @@ void model_select()
                     //转到位
                     {
                         turn_finish_flag = 1;
+                        //LOG_S(turn_finish, true)
                     }
                     else  //没有转到位
                     {
@@ -406,13 +522,13 @@ void model_select()
                     //car_state = CAR_TRACK;
                     if (num_flag)  // 收到转向数据即数字识别完成
                     {
+                        num_flag = false;
                         turn_state = turn_dir; // 需要储存转向数据
                         car_state = CAR_TRACK;
                         stop_state = STOP_NUM;
-                        LOG_S(car_state,CAR_TURN)
-                        LOG_S(stop_state,STOP_NUM)
-                        back_dir[i] = turn_dir; // 需要储存转向数据
-                        i++;
+                        LOG_S(car_state, CAR_TRACK)
+                        LOG_S(stop_state, STOP_NUM)
+                        lefl_stack_push(&stack, turn_dir);
                         track_flag = 1;
                         turn_flag = 0;
                     }
@@ -437,12 +553,13 @@ void model_select()
                         track_flag = 0;
                         turn_flag = 0;
                     }
+                    K210_stop_flag = false;
                     break;
                 case STOP_CROSSING:  //只有走到所需数字前的十字才会进入停止状态这里只是一个中转
                     car_state = CAR_TURN;
-                    LOG_S(car_state,CAR_TURN)
+                    LOG_S(car_state, CAR_TURN)
                     track_flag = 0;
-                    turn_flag = 0;
+                    turn_flag = 1;
                     break;
                 case STOP_END:
                     if (deliver_return_flag)  // 判断返回先转180
@@ -451,8 +568,8 @@ void model_select()
                         //deliver_return_flag = true;
                         car_state = CAR_TURN;
                         turn_state = TURN_BACK;
-                        LOG_S(car_state,CAR_TURN)
-                        LOG_S(turn_state,TURN_BACK)
+                        LOG_S(car_state, CAR_TURN)
+                        LOG_S(turn_state, TURN_BACK)
                         track_flag = 0;
                         turn_flag = 0;
                     }

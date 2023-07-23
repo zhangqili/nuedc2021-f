@@ -59,7 +59,7 @@ def find_cross():
                 img.draw_rectangle(blob.rect())
             if (not cross_star[i]):
                 n_1[i] += 1
-            if (n_1[i]==30):
+            if (n_1[i]==10):
                 cross_star[i]=1
                 n_1[i]=0                          #两侧超过30帧有，则判断什么时候没有
         else:

@@ -51,13 +51,18 @@ void lefl_advanced_key_update(lefl_advanced_key_t* key,float value)
         key->value=value;
         if(key->value-key->schmitt_parameter>key->trigger_distance)
         {
-            if(key->state==false&&key->key_cb!=NULL)
-                key->key_cb(key);
+            if(key->state==false)
+            {
+                if(key->key_cb!=NULL)
+                    key->key_cb(key);
+                key->trigger=true;
+            }
             key->state=true;
         }
         if(key->value+key->schmitt_parameter<key->trigger_distance)
         {
             key->state=false;
+            key->trigger=false;
         }
         break;
     case LEFL_KEY_ANALOG_RAPID_MODE:
@@ -73,6 +78,7 @@ void lefl_advanced_key_update(lefl_advanced_key_t* key,float value)
             {
                 key->minimum = key->value;
                 key->state = false;
+                key->trigger=false;
             }
         }
         else
@@ -80,8 +86,12 @@ void lefl_advanced_key_update(lefl_advanced_key_t* key,float value)
             if (key->value - key->minimum - key->schmitt_parameter >= key->trigger_distance)
             {
                 key->maximum = key->value;
-                if(key->state==false&&key->key_cb!=NULL)
-                    key->key_cb(key);
+                if(key->state==false)
+                {
+                    if(key->key_cb!=NULL)
+                        key->key_cb(key);
+                    key->trigger=true;
+                }
                 key->state = true;
             }
             if (key->maximum - key->value - key->schmitt_parameter >= key->release_distance)
@@ -93,12 +103,17 @@ void lefl_advanced_key_update(lefl_advanced_key_t* key,float value)
         if (key->value <= 0.0)
         {
             key->state = false;
+            key->trigger=false;
             key->minimum = 0.0;
         }
         if (key->value >= 1.0)
         {
-            if(key->state==false&&key->key_cb!=NULL)
-                key->key_cb(key);
+            if(key->state==false)
+            {
+                if(key->key_cb!=NULL)
+                    key->key_cb(key);
+                key->trigger=true;
+            }
             key->state = true;
             key->maximum = 1.0;
         }
@@ -106,20 +121,25 @@ void lefl_advanced_key_update(lefl_advanced_key_t* key,float value)
     case LEFL_KEY_ANALOG_SPEED_MODE:
         if(value-key->value > key->trigger_speed)
         {
-            if(key->state==false&&key->key_cb!=NULL)
-                key->key_cb(key);
+            if(key->state==false)
+            {
+                if(key->key_cb!=NULL)
+                    key->key_cb(key);
+                key->trigger=true;
+            }
             key->state=true;
         }
         if(value-key->value < key->release_speed)
         {
             key->state=false;
+            key->trigger=false;
         }
         key->value=value;
         break;
     }
 }
 
-void lefl_advanced_key_update_raw(lefl_advanced_key_t* key, int16_t value)
+void lefl_advanced_key_update_raw(lefl_advanced_key_t* key, float value)
 {
     key->raw=value;
     if(key->mode==LEFL_KEY_DIGITAL_MODE)
@@ -141,7 +161,7 @@ void lefl_advanced_key_update_state(lefl_advanced_key_t* key, bool state)
     key->state=state;
 }
 
-float lefl_advanced_key_normalize(lefl_advanced_key_t* key, int16_t value)
+float lefl_advanced_key_normalize(lefl_advanced_key_t* key, float value)
 {
     float x;
     x=(key->upper_bound-(key->upper_bound - key->lower_bound)*key->upper_deadzone -value)/(key->range);

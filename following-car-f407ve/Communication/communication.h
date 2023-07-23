@@ -50,6 +50,7 @@ extern uint8_t u##_TX_Length;
 COM_DECLARE(USART1)
 COM_DECLARE(USART3)
 COM_DECLARE(UART4)
+COM_DECLARE(UART5)
 
 extern uint16_t Communication_TX_Count;
 extern uint16_t Communication_RX_Count;

@@ -92,18 +92,18 @@ void follow_speed_adjust(void)
 {
 	if(track_flag && (turn_flag!=1))
 		{
-			Track(20);
+			Track(15);
 		}
 #if USE_GYRO == 1
 	else if((track_flag==0)&& turn_flag)
 	{
 		if(turn_state == TURN_LEFT)
 		{
-			Motor_PID(0, 40);
+			Motor_PID(1, 15);
 		}
 		else if(turn_state == TURN_RIGHT)
 		{
-			Motor_PID(40, 0);
+			Motor_PID(15, 1);
 		}
 		else if(turn_state == TURN_BACK)
 		{

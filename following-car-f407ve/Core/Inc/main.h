@@ -66,7 +66,7 @@ extern uint32_t tick_count;
 
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
-#define LOG_S(state_t,state) printf("%s -> %s : %6d\n",#state_t,#state,tick_count);
+#define LOG_S(state_t,state) printf("%s->%s : \t%ld\n",#state_t,#state,tick_count);
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/

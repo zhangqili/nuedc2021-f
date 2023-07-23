@@ -3,11 +3,6 @@
  */
 #include "lefl.h"
 
-void lefl_cursor_draw(lefl_cursor_t *c)
-{
-    c->draw_cb(c);
-}
-
 void lefl_cursor_move(lefl_cursor_t *c,lefl_cursor_t *tc)
 {
     lefl_easing_pid(&(c->x),tc->x);

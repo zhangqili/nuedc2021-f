@@ -31,13 +31,11 @@ extern "C" {
         float y;
         float w;
         float h;
-        void (*draw_cb)(struct __lefl_cursor_t* cursor);
     } lefl_cursor_t;
 
     extern lefl_cursor_t cursor;
     extern lefl_cursor_t target_cursor;
 
-    void lefl_cursor_draw(lefl_cursor_t* c);
     void lefl_cursor_move(lefl_cursor_t* c, lefl_cursor_t* tc);
     void lefl_cursor_set(lefl_cursor_t* c, float x, float y, float w, float h);
 
@@ -160,7 +158,7 @@ extern "C" {
     lefl_animation_float_t lefl_animation_tick(lefl_animation_base_t *a);
     lefl_animation_float_t lefl_animation_normalize(lefl_animation_base_t *a);
 
-#define LEFL_ANIMATION_SPEED       (1/8.0)
+#define LEFL_ANIMATION_SPEED       (1/5.0)
     void lefl_easing_pid(float* f, float target);
     lefl_animation_float_t lefl_animation_sine_ease(lefl_animation_float_t f, ...);
     lefl_animation_float_t lefl_animation_pow_ease(lefl_animation_float_t f, ...);
@@ -179,7 +177,7 @@ extern "C" {
      * lefl_datastruct.c
      */
 
-#define LEFL_ARRAY_MAX 200
+#define LEFL_ARRAY_MAX 32
     typedef uint16_t lefl_array_t;
 
     typedef struct __lefl_loop_array_t
@@ -210,6 +208,21 @@ extern "C" {
     void lefl_bit_array_set(lefl_bit_array_t* arr, int16_t n,bool b);
     bool lefl_bit_array_get(lefl_bit_array_t* arr, int16_t n);
     void lefl_bit_array_shift(lefl_bit_array_t* arr, int16_t n);
+
+    typedef uint16_t lefl_stack_elem_t;
+
+    typedef struct __lefl_stack_t
+    {
+        lefl_stack_elem_t list[LEFL_ARRAY_MAX];
+        int16_t top;
+        int16_t len;
+    } lefl_stack_t;
+
+    lefl_stack_elem_t lefl_stack_get(lefl_stack_t* stack, lefl_stack_elem_t j);
+    void lefl_stack_push(lefl_stack_t* stack, lefl_stack_elem_t t);
+    lefl_stack_elem_t lefl_stack_pop(lefl_stack_t* stack, lefl_stack_elem_t *t);
+
+
     /*
      * lefl_input.c
      */
@@ -231,7 +244,6 @@ extern "C" {
         LEFL_KEY_ANALOG_RAPID_MODE,
         LEFL_KEY_ANALOG_SPEED_MODE
     } lefl_key_mode_t;
-
 
     typedef struct __lefl_advanced_key_t
     {
@@ -258,9 +270,9 @@ extern "C" {
 
     void lefl_advanced_key_init(lefl_advanced_key_t* key);
     void lefl_advanced_key_update(lefl_advanced_key_t* key, float value);
-    void lefl_advanced_key_update_raw(lefl_advanced_key_t* key, int16_t value);
+    void lefl_advanced_key_update_raw(lefl_advanced_key_t* key, float value);
     void lefl_advanced_key_update_state(lefl_advanced_key_t* key, bool state);
-    float lefl_advanced_key_normalize(lefl_advanced_key_t* key, int16_t value);
+    float lefl_advanced_key_normalize(lefl_advanced_key_t* key, float value);
     bool lefl_advanced_key_is_triggered(lefl_advanced_key_t* key);
     void lefl_advanced_key_set_range(lefl_advanced_key_t* key, float upper, float lower);
     void lefl_advanced_key_set_deadzone(lefl_advanced_key_t* key, float upper, float lower);

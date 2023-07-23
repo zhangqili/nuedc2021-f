@@ -79,3 +79,28 @@ void lefl_bit_array_shift(lefl_bit_array_t* arr, int16_t n)
     }
 }
 
+
+lefl_stack_elem_t lefl_stack_get(lefl_stack_t* stack, lefl_stack_elem_t j)
+{
+    if(j>0 && j < stack->top)
+        return stack->list[j];
+    else
+        return 0;
+}
+void lefl_stack_push(lefl_stack_t* stack, lefl_stack_elem_t t)
+{
+    if(stack->top+1<stack->len)
+    {
+        stack->list[stack->top]=t;
+        stack->top++;
+    }
+}
+lefl_stack_elem_t lefl_stack_pop(lefl_stack_t* stack, lefl_stack_elem_t *t)
+{
+    if(stack->top>0)
+    {
+        stack->top--;
+        *t = stack->list[stack->top];
+    }
+    return *t;
+}

@@ -203,6 +203,7 @@ int main(void)
 
 
   atk_ms901m_uart_init(115200);
+  Communication_Enable(&huart5, UART5_RX_Buffer,BUFFER_LENGTH);
   Communication_Enable(&huart4, UART4_RX_Buffer,BUFFER_LENGTH);
   Communication_Enable(&huart3, USART3_RX_Buffer,BUFFER_LENGTH);
   Communication_Enable(&huart1, USART1_RX_Buffer,BUFFER_LENGTH);
@@ -210,7 +211,6 @@ int main(void)
   yaw_adjust=Angle_gz+90;
   car_state =CAR_START;
   //turn_state =TURN_LEFT;
-  number = 1;
 
   LOG_S(hello, world)
   /* USER CODE END 2 */
