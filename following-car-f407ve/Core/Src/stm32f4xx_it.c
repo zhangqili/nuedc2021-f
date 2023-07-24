@@ -303,6 +303,7 @@ void UART5_IRQHandler(void)
   /* USER CODE END UART5_IRQn 0 */
   HAL_UART_IRQHandler(&huart5);
   /* USER CODE BEGIN UART5_IRQn 1 */
+  Communication_Unpack(&huart5);
 
   /* USER CODE END UART5_IRQn 1 */
 }

@@ -67,9 +67,7 @@ void Communication_Unpack(UART_HandleTypeDef *huart)
           USART3_RX_Length = BUFFER_LENGTH - __HAL_DMA_GET_COUNTER(&hdma_usart3_rx);
           if(USART3_RX_Buffer[USART3_RX_Length-1]==USART3_RX_Length)
           {
-              if(deliver_return_flag==false)
-              {
-                  bias_error=(int8_t)USART3_RX_Buffer[1];
+              bias_error=(int8_t)USART3_RX_Buffer[1];
                   if(USART3_RX_Buffer[3]==1)
                   {
                       LOG_S(MV,true);
@@ -77,10 +75,9 @@ void Communication_Unpack(UART_HandleTypeDef *huart)
                   }
                   if(USART3_RX_Buffer[3]==2)
                   {
-                      LOG_S(end,true);
+                      //LOG_S(end,true);
                       MV_end_flag=true;
                   }
-              }
           }
           HAL_UART_Receive_DMA(huart, USART3_RX_Buffer, BUFFER_LENGTH);
       }

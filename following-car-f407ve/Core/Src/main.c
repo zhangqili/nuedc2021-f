@@ -220,7 +220,8 @@ int main(void)
 
   while (1)
   {
-    HAL_GPIO_TogglePin(LED_GPIO_Port,LED_Pin);
+    if(!HAL_GPIO_ReadPin(KEY1_GPIO_Port, KEY1_Pin))
+        deliver_return_flag=true;
 
     //tempEncoder=(motor_l.Encoder+motor_r.Encoder)/2;
     //HAL_UART_Transmit(&huart1,&tempEncoder,1,0xff);

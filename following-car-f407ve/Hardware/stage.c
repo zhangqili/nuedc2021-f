@@ -141,6 +141,7 @@ void model_select()
                 if (MV_stop_flag) //这里就只有openmv识别以后只有左右转不会停下来
                 {
                     MV_stop_flag = false;
+                    printf("back Crossing%d",stack.top);
                     lefl_stack_pop(&stack, &turn_dir);
                     if (turn_dir == TURN_LEFT) //倒退回溯右变左
                     {
@@ -150,6 +151,7 @@ void model_select()
                         LOG_S(turn_state, TURN_RIGHT)
                         track_flag = 0;
                         turn_flag = 1;
+                        yaw_adjust = Angle_gz - 90;
                     }
                     else if (turn_dir == TURN_RIGHT) //左变右
                     {
@@ -159,6 +161,7 @@ void model_select()
                         LOG_S(turn_state, TURN_LEFT)
                         track_flag = 0;
                         turn_flag = 1;
+                        yaw_adjust = Angle_gz + 90;
                     }
                     else
                     {
@@ -216,7 +219,6 @@ void model_select()
                     track_flag = 0;
                     turn_flag = 0;
                     //yaw_adjust=Angle_gz;
-                    angle = Angle_gz;
                     switch (turn_dir)
                     {
                         case TURN_STRAIGHT:
@@ -257,6 +259,8 @@ void model_select()
 
                     if (number == 1)
                     {
+                        lefl_stack_push(&stack, TURN_LEFT);
+                        printf("Turning Crossing%d",stack.top);
                         car_state = CAR_TURN;
                         turn_state = TURN_LEFT;
                         LOG_S(car_state, CAR_TURN)
@@ -273,6 +277,8 @@ void model_select()
                     }
                     else if (number == 2)
                     {
+                        lefl_stack_push(&stack, TURN_LEFT);
+                        printf("Turning Crossing%d",stack.top);
                         car_state = CAR_TURN;
                         turn_state = TURN_RIGHT;
                         LOG_S(car_state, CAR_TURN)
@@ -311,7 +317,6 @@ void model_select()
                         track_flag = 0;
                         turn_flag = 0;
                         //yaw_adjust=Angle_gz;
-                        angle = Angle_gz;
                         switch (turn_dir)
                         {
                             case TURN_STRAIGHT:
@@ -529,6 +534,7 @@ void model_select()
                         LOG_S(car_state, CAR_TRACK)
                         LOG_S(stop_state, STOP_NUM)
                         lefl_stack_push(&stack, turn_dir);
+                        printf("Turning Crossing%d",stack.top);
                         track_flag = 1;
                         turn_flag = 0;
                     }
@@ -570,6 +576,13 @@ void model_select()
                         turn_state = TURN_BACK;
                         LOG_S(car_state, CAR_TURN)
                         LOG_S(turn_state, TURN_BACK)
+
+                        yaw_adjust = Angle_gz + 180;
+                        if (yaw_adjust > 360)
+                            yaw_adjust %= 360;
+                        else if (yaw_adjust < 0)
+                            yaw_adjust = (yaw_adjust + 360) % 360;
+
                         track_flag = 0;
                         turn_flag = 0;
                     }
